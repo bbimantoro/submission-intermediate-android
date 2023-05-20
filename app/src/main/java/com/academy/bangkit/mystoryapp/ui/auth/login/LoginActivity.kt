@@ -1,4 +1,4 @@
-package com.academy.bangkit.mystoryapp.ui.login
+package com.academy.bangkit.mystoryapp.ui.auth.login
 
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity

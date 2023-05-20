@@ -6,10 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowInsets
 import android.view.WindowManager
-import com.academy.bangkit.mystoryapp.R
 import com.academy.bangkit.mystoryapp.databinding.ActivityWelcomeBinding
-import com.academy.bangkit.mystoryapp.ui.login.LoginActivity
-import com.academy.bangkit.mystoryapp.ui.register.RegisterActivity
+import com.academy.bangkit.mystoryapp.ui.auth.login.LoginActivity
+import com.academy.bangkit.mystoryapp.ui.auth.signup.SignupActivity
 
 class WelcomeActivity : AppCompatActivity() {
 
@@ -39,7 +38,7 @@ class WelcomeActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.signupBtn.setOnClickListener {
-            startActivity(Intent(this@WelcomeActivity, RegisterActivity::class.java))
+            startActivity(Intent(this@WelcomeActivity, SignupActivity::class.java))
         }
 
         binding.loginBtn.setOnClickListener {

@@ -1,12 +1,26 @@
 <resources>
-    <string name="app_name">MyStoryApp</string>
+    <string name="app_name" translatable="false">MyStoryApp</string>
     <string name="title_welcome_page">Welcome to Dicoding Stories!</string>
     <string name="desc_welcome_page">Explore a collection of learning stories from Dicoding students and graduates.</string>
 
-    <string name="login">Log In</string>
-    <string name="welcome_back_login_page">Welcome back!</string>
+    <string name="title_login_page">Welcome back!</string>
 
     <string name="signup">Sign Up</string>
+    <string name="login">Log In</string>
+
+    <string name="field_password">Password is too short (minimum is 8 characters)</string>
+    <string name="invalid_email">Email is invalid</string>
+    <string name="err_name">Name can\'t be blank</string>
+    <string name="err_email">Email can\'t be blank</string>
+    <string name="err_password">Password can\'t be blank</string>
+
+    <string name="signup_success_message">Registration successful!</string>
+
+    <string name="upload">Upload</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+
+    <string name="enter_desc">Enter a description</string>
 
     <string name="name">Name</string>
     <string name="email">Email</string>

@@ -1,13 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MyStoryApp</string>
     <string name="title_welcome_page">Selamat datang di Dicoding Story!</string>
     <string name="desc_welcome_page">Jelajahi kumpulan cerita belajar dari siswa dan lulusan Dicoding.</string>
 
     <string name="login">Masuk</string>
-    <string name="welcome_back_login_page">Selamat datang kembali!</string>
+    <string name="title_login_page">Selamat datang kembali!</string>
 
     <string name="signup">Daftar</string>
+    <string name="field_password">Kata sandi terlalu pendek (minimal 8 karakter)</string>
+
+    <string name="field_required">Harap isi kolom ini</string>
+
+    <string name="invalid_email">Email tidak valid</string>
+
+    <string name="signup_success_message">Registrasi berhasil!</string>
+
+    <string name="title_response">Yeah!</string>
+    <string name="message_response_signup">Akun anda telah dibuat. Masuk sekarang untuk memulai.</string>
+    <string name="accept">Lanjut</string>
+
+    <string name="err_name">Nama tidak boleh kosong</string>
+    <string name="err_email">Emai tidak boleh kosong</string>
+    <string name="err_password">Password tidak boleh kosong</string>
+
+
+    <string name="upload">Unggah</string>
+    <string name="camera">Kamera</string>
+    <string name="gallery">Galeri</string>
+
+    <string name="enter_desc">Masukkan deskripsi</string>
 
     <string name="name">Nama</string>
     <string name="email">Email</string>
