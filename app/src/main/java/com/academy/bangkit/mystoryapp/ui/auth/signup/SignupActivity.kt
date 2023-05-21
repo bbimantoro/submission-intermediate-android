@@ -1,11 +1,8 @@
 package com.academy.bangkit.mystoryapp.ui.auth.signup
 
 import android.content.Intent
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.WindowInsets
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import com.academy.bangkit.mystoryapp.R
@@ -23,28 +20,16 @@ class SignupActivity : AppCompatActivity() {
         binding = ActivitySignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupView()
-        setupAction()
-    }
-
-
-    private fun setupView() {
-        @Suppress("DEPRECATION")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.hide(WindowInsets.Type.statusBars())
-        } else {
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-            )
-        }
         supportActionBar?.hide()
+
+        setupAction()
     }
 
     private fun setupAction() {
         binding.signupBtn.setOnClickListener {
-            val name = binding.nameEdt.text.toString().trim()
-            val email = binding.emailEdt.text.toString().trim()
+
+            val name = binding.nameEdt.text.toString()
+            val email = binding.emailEdt.text.toString()
             val password = binding.passwordEdt.text.toString()
 
             when {
@@ -53,7 +38,7 @@ class SignupActivity : AppCompatActivity() {
                 }
 
                 email.isEmpty() -> {
-                    binding.emailEdt.error = getString(R.string.err_email)
+                    binding.nameEdt.error = getString(R.string.err_email)
                 }
 
                 password.isEmpty() -> {
@@ -61,28 +46,32 @@ class SignupActivity : AppCompatActivity() {
                 }
 
                 else -> {
-                    signupViewModel.signup(name, email, password)
+                    signupViewModel.signup(
+                        name,
+                        email,
+                        password
+                    )
+                }
+            }
 
-                    signupViewModel.result.observe(this) { result ->
-                        when (result) {
-                            is Result.Success -> {
-                                Toast.makeText(
-                                    this,
-                                    getString(R.string.signup_success_message),
-                                    Toast.LENGTH_SHORT
-                                ).show()
+            signupViewModel.result.observe(this) { result ->
+                when (result) {
+                    is Result.Success -> {
+                        Toast.makeText(
+                            this,
+                            getString(R.string.signup_success_message),
+                            Toast.LENGTH_SHORT
+                        ).show()
 
-                                val intent = Intent(this@SignupActivity, LoginActivity::class.java)
-                                startActivity(intent)
-                            }
-
-                            is Result.Error -> {
-                                Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
-                            }
-
-                            is Result.Loading -> {}
-                        }
+                        val intent = Intent(this, LoginActivity::class.java)
+                        startActivity(intent)
                     }
+
+                    is Result.Error -> {
+                        Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
+                    }
+
+                    is Result.Loading -> {}
                 }
             }
         }

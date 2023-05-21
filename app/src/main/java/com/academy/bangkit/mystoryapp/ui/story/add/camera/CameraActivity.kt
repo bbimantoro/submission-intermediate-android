@@ -1,12 +1,12 @@
-package com.academy.bangkit.mystoryapp.ui.addstory
+package com.academy.bangkit.mystoryapp.ui.story.add.camera
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.academy.bangkit.mystoryapp.R
 
-class AddStoryActivity : AppCompatActivity() {
+class CameraActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_story)
+        setContentView(R.layout.activity_camera)
     }
 }

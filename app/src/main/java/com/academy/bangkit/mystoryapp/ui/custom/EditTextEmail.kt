@@ -33,7 +33,7 @@ class EditTextEmail : AppCompatEditText {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (!isValidEmail(s.toString())) {
                     this@EditTextEmail.error =
-                        resources.getString(R.string.invalid_email)
+                        resources.getString(R.string.field_email)
                 } else {
                     this@EditTextEmail.error = null
                 }

@@ -15,10 +15,13 @@
         android:theme="@style/Theme.MyStoryApp"
         tools:targetApi="31">
         <activity
-            android:name=".ui.addstory.AddStoryActivity"
+            android:name=".ui.story.add.camera.CameraActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.addstory.camera.CameraActivity"
+            android:name=".ui.story.detail.DetailStoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.story.add.AddStoryActivity"
             android:exported="false" />
         <activity
             android:name=".ui.auth.signup.SignupActivity"

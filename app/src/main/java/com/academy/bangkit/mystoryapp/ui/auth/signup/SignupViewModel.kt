@@ -15,8 +15,8 @@ class SignupViewModel : ViewModel() {
     val result: LiveData<Result<CommonResponse>> = _result
 
     fun signup(name: String, email: String, password: String) {
-        _result.value = Result.Loading
         viewModelScope.launch {
+            _result.value = Result.Loading
             try {
                 val response = ApiConfig.getApiService().signup(name, email, password)
                 _result.value = Result.Success(response)
