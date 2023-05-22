@@ -4,18 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.story.add.AddStoryActivity">
+    tools:context=".ui.story.post.PostStoryActivity">
 
     <ImageView
         android:id="@+id/previewIv"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:scaleType="centerCrop"
+        android:layout_width="@dimen/default_size"
+        android:layout_height="@dimen/default_size"
+        android:layout_margin="8dp"
+        android:contentDescription="@string/content_desc_image"
+        android:scaleType="fitCenter"
         app:layout_constraintBottom_toTopOf="@+id/horizontalGuideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@drawable/place_holder_24" />
+        app:srcCompat="@drawable/place_holder_24" />
 
     <Button
         android:id="@+id/cameraBtn"
@@ -27,7 +29,8 @@
         android:text="@string/camera"
         app:layout_constraintEnd_toStartOf="@+id/galleryBtn"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/horizontalGuideline" />
+        app:layout_constraintTop_toTopOf="@+id/horizontalGuideline"
+        app:shapeAppearance="@style/roundCorner" />
 
     <Button
         android:id="@+id/galleryBtn"
@@ -39,17 +42,21 @@
         android:text="@string/gallery"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cameraBtn"
-        app:layout_constraintTop_toTopOf="@+id/horizontalGuideline" />
+        app:layout_constraintTop_toTopOf="@+id/horizontalGuideline"
+        app:shapeAppearance="@style/roundCorner" />
 
     <EditText
-        android:id="@+id/descEdt"
+        android:id="@+id/descriptionEdt"
         android:layout_width="@dimen/default_size"
-        android:layout_height="200dp"
+        android:layout_height="240dp"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
+        android:autofillHints="Description"
+        android:background="@drawable/bg_edt_description"
         android:gravity="start|top"
         android:hint="@string/enter_desc"
-        android:inputType="text"
+        android:inputType="textMultiLine"
+        android:padding="16dp"
         app:layout_constraintBottom_toTopOf="@+id/uploadBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -65,7 +72,20 @@
         android:text="@string/upload"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:shapeAppearance="@style/roundCorner" />
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/horizontalGuideline"

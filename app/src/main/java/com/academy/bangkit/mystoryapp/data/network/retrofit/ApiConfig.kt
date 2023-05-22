@@ -19,11 +19,12 @@ object ApiConfig {
             .addInterceptor(loggingInterceptor)
             .build()
 
-        return Retrofit.Builder()
+        val retrofit = Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
-            .create(StoryApiService::class.java)
+
+        return retrofit.create(StoryApiService::class.java)
     }
 }

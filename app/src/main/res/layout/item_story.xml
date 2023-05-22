@@ -13,7 +13,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/pictureIv"
+            android:id="@+id/thumbnailIv"
             android:layout_width="0dp"
             android:layout_height="194dp"
             android:contentDescription="@string/content_desc_image"
@@ -32,7 +32,7 @@
             android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pictureIv" />
+            app:layout_constraintTop_toBottomOf="@+id/thumbnailIv" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

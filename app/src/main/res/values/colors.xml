@@ -2,6 +2,8 @@
 <resources>
     <color name="orange_500">#FF6000</color>
     <color name="orange_200">#FFA559</color>
+    <color name="orange_100">#FFE6C7</color>
+    <color name="gray">#EDEDED</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 </resources>

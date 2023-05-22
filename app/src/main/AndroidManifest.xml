@@ -2,7 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature android:name="android.hardware.camera" />
+
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -15,13 +18,13 @@
         android:theme="@style/Theme.MyStoryApp"
         tools:targetApi="31">
         <activity
-            android:name=".ui.story.add.camera.CameraActivity"
+            android:name=".ui.story.post.PostStoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.camera.CameraActivity"
             android:exported="false" />
         <activity
             android:name=".ui.story.detail.DetailStoryActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.story.add.AddStoryActivity"
             android:exported="false" />
         <activity
             android:name=".ui.auth.signup.SignupActivity"
@@ -39,7 +42,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.main.MainActivity"
             android:exported="true" />
     </application>
 

@@ -5,24 +5,33 @@
 
     <string name="signup">Sign Up</string>
     <string name="login">Log In</string>
+    <string name="logout">Log Out</string>
 
     <string name="field_password">Password is too short (minimum is 8 characters)</string>
-    <string name="field_email">Please enter a valid email address</string>
+    <string name="field_email">Incorrect Email format</string>
 
-    <string name="err_name">Name can\'t be blank</string>
-    <string name="err_email">Email can\'t be blank</string>
-    <string name="err_password">Password can\'t be blank</string>
+    <string name="err_name_field">Name can\'t be blank</string>
+    <string name="err_email_field">Email can\'t be blank</string>
+    <string name="err_password_field">Password can\'t be blank</string>
+    <string name="err_description_field">Description can\'t be blank</string>
+    <string name="err_image_field">Picture can\'t be blank</string>
 
     <string name="signup_success_message">Registration successful!</string>
-    <string name="login_success_message">Login successful!</string>
+    <string name="post_story_success_message">Story posted successfully!</string>
 
-    <string name="upload">Upload</string>
-    <string name="camera">Camera</string>
-    <string name="gallery">Gallery</string>
+    <string name="upload">Upload Story</string>
+    <string name="camera">Take from Camera</string>
+    <string name="gallery">Choose from Gallery</string>
 
     <string name="enter_desc">Enter a description</string>
 
+    <string name="date">5/8/2021</string>
+    <string name="date_format">Uploaded on %1$s</string>
+
     <string name="content_desc_image">Story picture</string>
+    <string name="content_desc_fab">Post a story</string>
+    <string name="content_desc_capture">Capture image</string>
+    <string name="content_desc_switch_camera">Switch camera</string>
 
     <string name="name">Name</string>
     <string name="desc">Description</string>

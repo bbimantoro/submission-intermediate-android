@@ -3,10 +3,12 @@ package com.academy.bangkit.mystoryapp.ui.auth.signup
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import com.academy.bangkit.mystoryapp.R
 import com.academy.bangkit.mystoryapp.data.Result
+import com.academy.bangkit.mystoryapp.data.network.response.CommonResponse
 import com.academy.bangkit.mystoryapp.databinding.ActivitySignupBinding
 import com.academy.bangkit.mystoryapp.ui.auth.login.LoginActivity
 
@@ -34,15 +36,15 @@ class SignupActivity : AppCompatActivity() {
 
             when {
                 name.isEmpty() -> {
-                    binding.nameEdt.error = getString(R.string.err_name)
+                    binding.nameEdt.error = getString(R.string.err_name_field)
                 }
 
                 email.isEmpty() -> {
-                    binding.nameEdt.error = getString(R.string.err_email)
+                    binding.nameEdt.error = getString(R.string.err_email_field)
                 }
 
                 password.isEmpty() -> {
-                    binding.passwordEdt.error = getString(R.string.err_password)
+                    binding.passwordEdt.error = getString(R.string.err_password_field)
                 }
 
                 else -> {
@@ -55,24 +57,32 @@ class SignupActivity : AppCompatActivity() {
             }
 
             signupViewModel.result.observe(this) { result ->
-                when (result) {
-                    is Result.Success -> {
-                        Toast.makeText(
-                            this,
-                            getString(R.string.signup_success_message),
-                            Toast.LENGTH_SHORT
-                        ).show()
+                observerSignup(result)
+            }
+        }
+    }
 
-                        val intent = Intent(this, LoginActivity::class.java)
-                        startActivity(intent)
-                    }
+    private fun observerSignup(result: Result<CommonResponse>) {
+        when (result) {
+            is Result.Loading -> {
+                binding.progressbar.visibility = View.VISIBLE
+            }
 
-                    is Result.Error -> {
-                        Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
-                    }
+            is Result.Success -> {
+                binding.progressbar.visibility = View.GONE
+                Toast.makeText(
+                    this,
+                    getString(R.string.signup_success_message),
+                    Toast.LENGTH_SHORT
+                ).show()
 
-                    is Result.Loading -> {}
-                }
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
+            }
+
+            is Result.Error -> {
+                binding.progressbar.visibility = View.GONE
+                Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
             }
         }
     }

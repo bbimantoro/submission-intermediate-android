@@ -6,4 +6,9 @@
     </style>
 
     <style name="Theme.MyStoryApp" parent="Base.Theme.MyStoryApp" />
+
+    <style name="roundCorner" parent="">
+        <item name="cornerSize">20%</item>
+    </style>
+
 </resources>

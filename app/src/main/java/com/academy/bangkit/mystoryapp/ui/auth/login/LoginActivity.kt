@@ -11,12 +11,13 @@ import androidx.activity.viewModels
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import com.academy.bangkit.mystoryapp.MainActivity
 import com.academy.bangkit.mystoryapp.R
 import com.academy.bangkit.mystoryapp.data.Result
 import com.academy.bangkit.mystoryapp.data.UserPreferences
+import com.academy.bangkit.mystoryapp.data.network.response.LoginResponse
 import com.academy.bangkit.mystoryapp.databinding.ActivityLoginBinding
 import com.academy.bangkit.mystoryapp.ui.UserViewModelFactory
+import com.academy.bangkit.mystoryapp.ui.main.MainActivity
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "token")
 
@@ -45,11 +46,11 @@ class LoginActivity : AppCompatActivity() {
 
             when {
                 name.isEmpty() -> {
-                    binding.emailEdt.error = getString(R.string.err_email)
+                    binding.emailEdt.error = getString(R.string.err_email_field)
                 }
 
                 password.isEmpty() -> {
-                    binding.passwordEdt.error = getString(R.string.err_password)
+                    binding.passwordEdt.error = getString(R.string.err_password_field)
                 }
 
                 else -> {
@@ -57,38 +58,32 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
 
-            loginViewModel.result.observe(this) { result ->
-                when (result) {
-                    is Result.Loading -> {
-                        binding.progressbar.visibility = View.VISIBLE
-                    }
+            loginViewModel.result.observe(this) { result -> observerLogin(result) }
+        }
+    }
 
-                    is Result.Error -> {
-                        binding.progressbar.visibility = View.GONE
-                        val error = result.error
-                        Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
-                    }
+    private fun observerLogin(result: Result<LoginResponse>) {
+        when (result) {
+            is Result.Loading -> {
+                binding.progressbar.visibility = View.VISIBLE
+            }
 
-                    is Result.Success -> {
-                        binding.progressbar.visibility = View.GONE
+            is Result.Success -> {
+                binding.progressbar.visibility = View.GONE
 
-                        val data = result.data.loginResult?.token
-                        data?.let {
-                            loginViewModel.saveToken(it)
-                        }
-                        Log.d("LoginActivity", "Token : $data")
-
-                        Toast.makeText(
-                            this,
-                            getString(R.string.login_success_message),
-                            Toast.LENGTH_SHORT
-                        ).show()
-
-                        val intent = Intent(this, MainActivity::class.java)
-                        startActivity(intent)
-                        finish()
-                    }
+                val data = result.data.loginResult?.token
+                data?.let {
+                    loginViewModel.saveToken(it)
                 }
+                Log.d("LoginActivity", "token: $data")
+
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+
+            is Result.Error -> {
+                Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
             }
         }
     }

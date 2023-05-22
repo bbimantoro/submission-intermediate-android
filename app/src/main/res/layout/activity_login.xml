@@ -70,6 +70,7 @@
         android:layout_marginTop="@dimen/margin_m"
         android:layout_marginEnd="@dimen/margin_l"
         android:text="@string/login"
+        app:shapeAppearance="@style/roundCorner"
         app:backgroundTint="@color/orange_500"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

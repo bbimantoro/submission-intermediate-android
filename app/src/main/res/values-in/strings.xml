@@ -5,23 +5,33 @@
 
     <string name="signup">Daftar</string>
     <string name="login">Masuk</string>
+    <string name="logout">Keluar</string>
 
     <string name="field_password">Kata sandi terlalu pendek (minimal 8 karakter)</string>
-    <string name="field_email">Masukkan alamat email yang valid</string>
+    <string name="field_email">Format email tidak sesuai</string>
 
-    <string name="err_name">Nama tidak boleh kosong</string>
-    <string name="err_email">Emai tidak boleh kosong</string>
-    <string name="err_password">Password tidak boleh kosong</string>
+    <string name="err_name_field">Nama tidak boleh kosong</string>
+    <string name="err_email_field">Email tidak boleh kosong</string>
+    <string name="err_password_field">Password tidak boleh kosong</string>
+    <string name="err_description_field">Deskripsi tidak boleh kosong</string>
+    <string name="err_image_field">Foto tidak boleh kosong</string>
 
     <string name="signup_success_message">Registrasi berhasil!</string>
-    <string name="login_success_message">Login berhasil!</string>
+    <string name="post_story_success_message">Cerita berhasil diposting!</string>
 
-    <string name="upload">Unggah</string>
-    <string name="camera">Kamera</string>
-    <string name="gallery">Galeri</string>
+    <string name="upload">Unggah Cerita</string>
+    <string name="camera">Ambil dari Kamera</string>
+    <string name="gallery">Pilih dari Galeri</string>
 
     <string name="enter_desc">Masukkan deskripsi</string>
+
+    <string name="date">5/8/2021</string>
+    <string name="date_format">Diunggah pada %1$s</string>
+
     <string name="content_desc_image">Gambar cerita</string>
+    <string name="content_desc_fab">Posting cerita</string>
+    <string name="content_desc_capture">Tangkap Gambar</string>
+    <string name="content_desc_switch_camera">Beralih kamera</string>
 
     <string name="name">Nama</string>
     <string name="desc">Deskripsi</string>
