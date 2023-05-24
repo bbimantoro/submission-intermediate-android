@@ -1,8 +1,11 @@
 package com.academy.bangkit.mystoryapp.ui.camera
 
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.WindowInsets
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -11,7 +14,7 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import com.academy.bangkit.mystoryapp.R
-import com.academy.bangkit.mystoryapp.createFile
+import com.academy.bangkit.mystoryapp.utils.createFile
 import com.academy.bangkit.mystoryapp.databinding.ActivityCameraBinding
 import com.academy.bangkit.mystoryapp.ui.story.post.PostStoryActivity
 
@@ -28,6 +31,25 @@ class CameraActivity : AppCompatActivity() {
 
         setupAction()
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        hideSystemUI()
+        startCamera()
+    }
+
+    private fun hideSystemUI() {
+        @Suppress("DEPRECATION")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            window.insetsController?.hide(WindowInsets.Type.statusBars())
+        } else {
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+            )
+        }
+        supportActionBar?.hide()
     }
 
     private fun setupAction() {

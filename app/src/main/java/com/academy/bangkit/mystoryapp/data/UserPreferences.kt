@@ -16,6 +16,20 @@ class UserPreferences private constructor(private val dataStore: DataStore<Prefe
         }
     }
 
+    suspend fun login(token: String, session: Boolean) {
+        dataStore.edit {
+            it[TOKEN_KEY] = token
+            it[SESSION_KEY] = session
+        }
+    }
+
+    suspend fun logout() {
+        dataStore.edit {
+            it[TOKEN_KEY] = ""
+            it[SESSION_KEY] = false
+        }
+    }
+
     suspend fun saveToken(token: String) {
         dataStore.edit {
             it[TOKEN_KEY] = token

@@ -1,4 +1,4 @@
-package com.academy.bangkit.mystoryapp
+package com.academy.bangkit.mystoryapp.utils
 
 import android.app.Application
 import android.content.ContentResolver
@@ -8,12 +8,15 @@ import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.net.Uri
 import android.os.Environment
+import com.academy.bangkit.mystoryapp.R
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.io.OutputStream
+import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 private const val FILENAME_FORMAT = "dd-MMM-yyyy"
@@ -84,5 +87,10 @@ fun reduceFileImage(file: File): File {
     } while (streamLength > MAXIMAL_SIZE)
     bitmap.compress(Bitmap.CompressFormat.JPEG, compressQuality, FileOutputStream(file))
     return file
+}
 
+fun String.withDataFormat(): String {
+    val format = SimpleDateFormat("dd/MM/yyyy", Locale.US)
+    val date = format.parse(this) as Date
+    return DateFormat.getDateInstance(DateFormat.FULL).format(date)
 }

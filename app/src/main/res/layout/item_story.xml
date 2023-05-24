@@ -10,7 +10,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="8dp">
 
         <ImageView
             android:id="@+id/thumbnailIv"
@@ -27,9 +28,9 @@
             android:id="@+id/nameTv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="8dp"
             android:text="@string/name"
             android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,10 +41,9 @@
             android:id="@+id/descTv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="8dp"
             android:ellipsize="end"
             android:maxLines="3"
             android:text="@string/desc"

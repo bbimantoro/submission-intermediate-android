@@ -23,11 +23,11 @@ import com.academy.bangkit.mystoryapp.R
 import com.academy.bangkit.mystoryapp.data.UserPreferences
 import com.academy.bangkit.mystoryapp.data.network.response.CommonResponse
 import com.academy.bangkit.mystoryapp.databinding.ActivityPostStoryBinding
-import com.academy.bangkit.mystoryapp.reduceFileImage
-import com.academy.bangkit.mystoryapp.rotateFile
+import com.academy.bangkit.mystoryapp.utils.reduceFileImage
+import com.academy.bangkit.mystoryapp.utils.rotateFile
 import com.academy.bangkit.mystoryapp.ui.ViewModelFactory
 import com.academy.bangkit.mystoryapp.ui.camera.CameraActivity
-import com.academy.bangkit.mystoryapp.uriToFile
+import com.academy.bangkit.mystoryapp.utils.uriToFile
 import com.academy.bangkit.mystoryapp.data.Result
 import java.io.File
 
