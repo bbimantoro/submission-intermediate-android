@@ -8,10 +8,10 @@ data class StoryResponse(
     val listStory: List<Story>,
 
     @field:SerializedName("error")
-    val error: Boolean? = null,
+    val error: Boolean,
 
     @field:SerializedName("message")
-    val message: String? = null
+    val message: String
 )
 
 data class Story(

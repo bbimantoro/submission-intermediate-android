@@ -24,7 +24,7 @@ class UserPreferences private constructor(private val dataStore: DataStore<Prefe
 
     suspend fun destroyToken() {
         dataStore.edit {
-            it.remove(TOKEN_KEY)
+            it[TOKEN_KEY] = ""
         }
     }
 
@@ -34,7 +34,7 @@ class UserPreferences private constructor(private val dataStore: DataStore<Prefe
         }
     }
 
-    fun getLogin(): Flow<Boolean> {
+    fun isLogin(): Flow<Boolean> {
         return dataStore.data.map {
             it[SESSION_KEY] ?: false
         }

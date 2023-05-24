@@ -19,7 +19,13 @@ class SignupViewModel : ViewModel() {
             _result.value = Result.Loading
             try {
                 val response = ApiConfig.getApiService().signup(name, email, password)
-                _result.value = Result.Success(response)
+
+                if (response.error) {
+                    _result.value = Result.Error(response.message)
+                } else {
+                    _result.value = Result.Success(response)
+                }
+
             } catch (e: Exception) {
                 Log.d(TAG, "signup: ${e.message.toString()}")
                 _result.value = Result.Error(e.message.toString())

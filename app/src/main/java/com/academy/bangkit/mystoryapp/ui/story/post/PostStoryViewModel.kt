@@ -36,11 +36,14 @@ class PostStoryViewModel : ViewModel() {
             val descriptionRequestBody = description.toRequestBody(textPlainMediaType)
 
             try {
-                val response = ApiConfig
-                    .getApiService()
+                val response = ApiConfig.getApiService()
                     .addNewStory(token, imageMultiPart, descriptionRequestBody)
 
-                _result.value = Result.Success(response)
+                if (response.error) {
+                    _result.value = Result.Error(response.message)
+                } else {
+                    _result.value = Result.Success(response)
+                }
 
             } catch (e: Exception) {
                 Log.d("PostStoryViewModel", "addNewStory: ${e.message.toString()}")

@@ -25,7 +25,12 @@ class MainViewModel(
             _result.value = Result.Loading
             try {
                 val response = ApiConfig.getApiService().getAllStories(token)
-                _result.value = Result.Success(response.listStory)
+
+                if (response.error) {
+                    _result.value = Result.Error(response.message)
+                } else {
+                    _result.value = Result.Success(response.listStory)
+                }
             } catch (e: Exception) {
                 Log.d("MainViewModel", "getAllStories: ${e.message.toString()}")
                 _result.value = Result.Error(e.message.toString())

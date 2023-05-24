@@ -25,6 +25,10 @@ class SignupActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         setupAction()
+
+        signupViewModel.result.observe(this) { result ->
+            observerSignup(result)
+        }
     }
 
     private fun setupAction() {
@@ -55,19 +59,11 @@ class SignupActivity : AppCompatActivity() {
                     )
                 }
             }
-
-            signupViewModel.result.observe(this) { result ->
-                observerSignup(result)
-            }
         }
     }
 
     private fun observerSignup(result: Result<CommonResponse>) {
         when (result) {
-            is Result.Loading -> {
-                binding.progressbar.visibility = View.VISIBLE
-            }
-
             is Result.Success -> {
                 binding.progressbar.visibility = View.GONE
                 Toast.makeText(
@@ -78,6 +74,11 @@ class SignupActivity : AppCompatActivity() {
 
                 val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
+                finish()
+            }
+
+            is Result.Loading -> {
+                binding.progressbar.visibility = View.VISIBLE
             }
 
             is Result.Error -> {

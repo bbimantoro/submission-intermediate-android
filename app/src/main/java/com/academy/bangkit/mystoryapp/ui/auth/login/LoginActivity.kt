@@ -38,6 +38,8 @@ class LoginActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         setupAction()
+
+        loginViewModel.result.observe(this) { result -> observerLogin(result) }
     }
 
     override fun onResume() {
@@ -74,17 +76,11 @@ class LoginActivity : AppCompatActivity() {
                     loginViewModel.login(name, password)
                 }
             }
-
-            loginViewModel.result.observe(this) { result -> observerLogin(result) }
         }
     }
 
     private fun observerLogin(result: Result<LoginResponse>) {
         when (result) {
-            is Result.Loading -> {
-                binding.progressbar.visibility = View.VISIBLE
-            }
-
             is Result.Success -> {
                 binding.progressbar.visibility = View.GONE
 
@@ -97,6 +93,10 @@ class LoginActivity : AppCompatActivity() {
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 finish()
+            }
+
+            is Result.Loading -> {
+                binding.progressbar.visibility = View.VISIBLE
             }
 
             is Result.Error -> {

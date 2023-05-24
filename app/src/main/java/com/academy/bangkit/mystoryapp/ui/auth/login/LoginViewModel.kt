@@ -23,7 +23,13 @@ class LoginViewModel(private val pref: UserPreferences) : ViewModel() {
             _result.value = Result.Loading
             try {
                 val response = ApiConfig.getApiService().login(email, password)
-                _result.value = Result.Success(response)
+
+                if (response.error) {
+                    _result.value = Result.Error(response.message)
+                } else {
+                    _result.value = Result.Success(response)
+                }
+
             } catch (e: Exception) {
                 Log.d(TAG, "login: ${e.message.toString()}")
                 _result.value = Result.Error(e.message.toString())
@@ -38,7 +44,7 @@ class LoginViewModel(private val pref: UserPreferences) : ViewModel() {
     }
 
     fun checkIsLogin(): LiveData<Boolean> {
-        return pref.getLogin().asLiveData()
+        return pref.isLogin().asLiveData()
     }
 
     companion object {
