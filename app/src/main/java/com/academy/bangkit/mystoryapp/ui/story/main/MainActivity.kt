@@ -20,7 +20,7 @@ import com.academy.bangkit.mystoryapp.data.UserPreferences
 import com.academy.bangkit.mystoryapp.data.network.response.Story
 import com.academy.bangkit.mystoryapp.databinding.ActivityMainBinding
 import com.academy.bangkit.mystoryapp.ui.ViewModelFactory
-import com.academy.bangkit.mystoryapp.ui.adapter.StoriesAdapter
+import com.academy.bangkit.mystoryapp.ui.adapter.StoryAdapter
 import com.academy.bangkit.mystoryapp.ui.auth.login.LoginActivity
 import com.academy.bangkit.mystoryapp.ui.story.post.PostStoryActivity
 
@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         ViewModelFactory(UserPreferences.getInstance(dataStore))
     }
 
-    private lateinit var storiesAdapter: StoriesAdapter
+    private lateinit var storyAdapter: StoryAdapter
 
     private lateinit var mainBinding: ActivityMainBinding
 
@@ -46,12 +46,12 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        storiesAdapter = StoriesAdapter()
+        storyAdapter = StoryAdapter()
 
         mainBinding.storyRv.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
-            adapter = storiesAdapter
+            adapter = storyAdapter
         }
 
         mainViewModel.result.observe(this) { result ->
@@ -73,12 +73,12 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
                 finish()
             } else {
-                setupDataView("Bearer $token")
+                setupStoryData("Bearer $token")
             }
         }
     }
 
-    private fun setupDataView(token: String) {
+    private fun setupStoryData(token: String) {
         mainViewModel.getAllStories(token)
     }
 
@@ -93,7 +93,7 @@ class MainActivity : AppCompatActivity() {
                     mainBinding.emptyStoryTv.visibility = View.VISIBLE
                 } else {
                     mainBinding.emptyStoryTv.visibility = View.GONE
-                    storiesAdapter.setListStory(storyData)
+                    storyAdapter.submitList(storyData)
                 }
             }
 

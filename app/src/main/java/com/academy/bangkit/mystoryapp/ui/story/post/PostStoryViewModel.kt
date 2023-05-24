@@ -4,8 +4,10 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.academy.bangkit.mystoryapp.data.Result
+import com.academy.bangkit.mystoryapp.data.UserPreferences
 import com.academy.bangkit.mystoryapp.data.network.response.CommonResponse
 import com.academy.bangkit.mystoryapp.data.network.retrofit.ApiConfig
 import kotlinx.coroutines.launch
@@ -15,7 +17,7 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 
-class PostStoryViewModel : ViewModel() {
+class PostStoryViewModel(private val userPreferences: UserPreferences) : ViewModel() {
 
     private var _result = MutableLiveData<Result<CommonResponse>>()
     val result: LiveData<Result<CommonResponse>> = _result
@@ -50,5 +52,8 @@ class PostStoryViewModel : ViewModel() {
                 _result.value = Result.Error(e.message.toString())
             }
         }
+    }
+    fun getToken(): LiveData<String> {
+        return userPreferences.getToken().asLiveData()
     }
 }

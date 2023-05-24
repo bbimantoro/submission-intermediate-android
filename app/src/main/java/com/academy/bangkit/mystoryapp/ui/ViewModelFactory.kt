@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.academy.bangkit.mystoryapp.data.UserPreferences
 import com.academy.bangkit.mystoryapp.ui.auth.login.LoginViewModel
 import com.academy.bangkit.mystoryapp.ui.story.main.MainViewModel
+import com.academy.bangkit.mystoryapp.ui.story.post.PostStoryViewModel
 import com.academy.bangkit.mystoryapp.ui.welcome.WelcomeViewModel
 
 class ViewModelFactory(private val pref: UserPreferences) :
@@ -15,6 +16,10 @@ class ViewModelFactory(private val pref: UserPreferences) :
         return when {
             modelClass.isAssignableFrom(MainViewModel::class.java) -> {
                 MainViewModel(pref) as T
+            }
+
+            modelClass.isAssignableFrom(PostStoryViewModel::class.java) -> {
+                PostStoryViewModel(pref) as T
             }
 
             modelClass.isAssignableFrom(WelcomeViewModel::class.java) -> {

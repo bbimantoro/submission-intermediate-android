@@ -24,11 +24,14 @@ import com.academy.bangkit.mystoryapp.data.UserPreferences
 import com.academy.bangkit.mystoryapp.data.network.response.CommonResponse
 import com.academy.bangkit.mystoryapp.databinding.ActivityPostStoryBinding
 import com.academy.bangkit.mystoryapp.utils.reduceFileImage
-import com.academy.bangkit.mystoryapp.utils.rotateFile
 import com.academy.bangkit.mystoryapp.ui.ViewModelFactory
 import com.academy.bangkit.mystoryapp.ui.camera.CameraActivity
 import com.academy.bangkit.mystoryapp.utils.uriToFile
 import com.academy.bangkit.mystoryapp.data.Result
+import com.academy.bangkit.mystoryapp.ui.auth.login.LoginActivity
+import com.academy.bangkit.mystoryapp.ui.story.main.MainActivity
+import com.academy.bangkit.mystoryapp.utils.rotateBitmap
+import com.bumptech.glide.Glide
 import java.io.File
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "token")
@@ -39,7 +42,7 @@ class PostStoryActivity : AppCompatActivity() {
         ViewModelFactory(UserPreferences.getInstance(dataStore))
     }
 
-    private lateinit var binding: ActivityPostStoryBinding
+    private lateinit var postStoryBinding: ActivityPostStoryBinding
 
     private var getFile: File? = null
     override fun onRequestPermissionsResult(
@@ -59,44 +62,10 @@ class PostStoryActivity : AppCompatActivity() {
         ContextCompat.checkSelfPermission(baseContext, it) == PackageManager.PERMISSION_GRANTED
     }
 
-    private val launcherIntentCamera = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) {
-        if (it.resultCode == CAMERA_RESULT) {
-            val myFile = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                it.data?.getSerializableExtra("picture", File::class.java)
-            } else {
-                @Suppress("DEPRECATION")
-                it.data?.getSerializableExtra("picture")
-            } as? File
-            val isBackCamera = it.data?.getBooleanExtra("isBackCamera", true) as Boolean
-
-            myFile?.let { file ->
-                rotateFile(file, isBackCamera)
-                getFile = file
-                binding.previewIv.setImageBitmap(BitmapFactory.decodeFile(file.path))
-            }
-        }
-    }
-
-    private val launcherIntentGallery = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) {
-        if (it.resultCode == RESULT_OK) {
-            val selectedImg = it.data?.data as Uri
-            selectedImg.let { uri ->
-                val myFile = uriToFile(uri, this@PostStoryActivity)
-                getFile = myFile
-                binding.previewIv.setImageURI(uri)
-
-            }
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityPostStoryBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        postStoryBinding = ActivityPostStoryBinding.inflate(layoutInflater)
+        setContentView(postStoryBinding.root)
 
         if (!allPermissionGranted()) {
             ActivityCompat.requestPermissions(
@@ -106,12 +75,7 @@ class PostStoryActivity : AppCompatActivity() {
             )
         }
 
-        setupAction()
-    }
-
-    private fun setupAction() {
-
-        with(binding) {
+        postStoryBinding.apply {
             cameraBtn.setOnClickListener {
                 startCamera()
             }
@@ -119,60 +83,71 @@ class PostStoryActivity : AppCompatActivity() {
             galleryBtn.setOnClickListener {
                 startGallery()
             }
+        }
 
-            uploadBtn.setOnClickListener {
+        postStoryViewModel.result.observe(this) { result ->
+            observerPostStory(result)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        checkUserSession()
+    }
+
+    private fun checkUserSession() {
+        postStoryViewModel.getToken().observe(this) { token ->
+            if (token.isEmpty()) {
+                val intent = Intent(this, LoginActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                startActivity(intent)
+            } else {
+                setupPostStory("Bearer $token")
             }
         }
     }
 
-    private fun setupUpload() {
-
-    }
-
-    private fun uploadImage(token: String) {
-        val description = binding.descriptionEdt.text.toString()
-
-        if (getFile != null) {
-            val file = reduceFileImage(getFile as File)
-
-            postStoryViewModel.addNewStory(token, file, description)
-            postStoryViewModel.result.observe(this) { result ->
-                observerPostStory(result)
-            }
-        } else {
-            Toast.makeText(this, getString(R.string.err_image_field), Toast.LENGTH_SHORT).show()
+    private fun setupPostStory(token: String) {
+        postStoryBinding.uploadBtn.setOnClickListener {
+            val description = postStoryBinding.descriptionEdt.text.toString()
 
             if (description.isEmpty()) {
-                Toast.makeText(this, getString(R.string.err_description_field), Toast.LENGTH_SHORT)
-                    .show()
+                postStoryBinding.descriptionEdt.error = getString(R.string.err_description_field)
+            } else {
+                if (getFile != null) {
+                    val file = reduceFileImage(getFile as File)
+                    postStoryViewModel.addNewStory(token, file, description)
+                }
             }
         }
     }
 
     private fun observerPostStory(result: Result<CommonResponse>) {
         when (result) {
-            is Result.Loading -> {
-                binding.progressbar.visibility = View.VISIBLE
-            }
-
             is Result.Success -> {
-                binding.progressbar.visibility = View.GONE
+                postStoryBinding.progressbar.visibility = View.GONE
                 Toast.makeText(
                     this,
                     getString(R.string.post_story_success_message),
                     Toast.LENGTH_SHORT
                 ).show()
 
-                val intent = Intent()
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+
+            is Result.Loading -> {
+                postStoryBinding.progressbar.visibility = View.VISIBLE
             }
 
             is Result.Error -> {
-                binding.progressbar.visibility = View.GONE
+                postStoryBinding.progressbar.visibility = View.GONE
                 Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
             }
         }
     }
-
 
     private fun startCamera() {
         val intent = Intent(this, CameraActivity::class.java)
@@ -187,6 +162,47 @@ class PostStoryActivity : AppCompatActivity() {
         launcherIntentGallery.launch(chooser)
     }
 
+    private val launcherIntentCamera = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == CAMERA_RESULT) {
+            val myFile = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                result.data?.getSerializableExtra("picture", File::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                result.data?.getSerializableExtra("picture")
+            } as? File
+            val isBackCamera = result.data?.getBooleanExtra("isBackCamera", true) as Boolean
+
+            getFile = myFile
+
+            val result = rotateBitmap(
+                BitmapFactory.decodeFile(getFile?.path), isBackCamera
+            )
+
+            postStoryBinding.previewIv.let {
+                Glide.with(this)
+                    .load(result)
+                    .into(it)
+            }
+        }
+    }
+
+    private val launcherIntentGallery = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val selectedImg = result.data?.data as Uri
+            val myFile = uriToFile(selectedImg, this)
+            getFile = myFile
+
+            postStoryBinding.previewIv.let {
+                Glide.with(this)
+                    .load(myFile)
+                    .into(it)
+            }
+        }
+    }
 
     companion object {
         const val CAMERA_RESULT = 200

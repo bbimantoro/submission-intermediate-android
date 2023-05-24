@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="16dp"
     tools:context=".ui.story.post.PostStoryActivity">
 
     <ImageView
@@ -12,7 +13,7 @@
         android:layout_height="@dimen/default_size"
         android:layout_margin="8dp"
         android:contentDescription="@string/content_desc_image"
-        android:scaleType="fitCenter"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toTopOf="@+id/horizontalGuideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -37,6 +37,7 @@ class StoryAdapter :
                 thumbnailIv.loadImage(data.photoUrl)
                 nameTv.text = data.name
                 descTv.text = data.description
+
             }
 
             itemView.setOnClickListener {
@@ -56,6 +57,7 @@ class StoryAdapter :
 
                 itemView.context.startActivity(intent, optionsCompat.toBundle())
             }
+
         }
     }
 
