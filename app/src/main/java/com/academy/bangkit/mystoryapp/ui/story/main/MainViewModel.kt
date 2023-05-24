@@ -1,4 +1,4 @@
-package com.academy.bangkit.mystoryapp.ui.main
+package com.academy.bangkit.mystoryapp.ui.story.main
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -8,6 +8,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.academy.bangkit.mystoryapp.data.UserPreferences
 import com.academy.bangkit.mystoryapp.data.Result
+import com.academy.bangkit.mystoryapp.data.network.response.Story
 import com.academy.bangkit.mystoryapp.data.network.retrofit.ApiConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,7 +37,7 @@ class MainViewModel(
         return pref.getToken().asLiveData()
     }
 
-    fun destroyToken() {
+    fun logout() {
         viewModelScope.launch(Dispatchers.IO) {
             pref.destroyToken()
         }

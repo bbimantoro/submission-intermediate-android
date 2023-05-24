@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.academy.bangkit.mystoryapp.data.Result
 import com.academy.bangkit.mystoryapp.data.UserPreferences
@@ -34,6 +35,10 @@ class LoginViewModel(private val pref: UserPreferences) : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             pref.saveToken(token)
         }
+    }
+
+    fun checkIsLogin(): LiveData<Boolean> {
+        return pref.getLogin().asLiveData()
     }
 
     companion object {

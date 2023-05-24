@@ -10,6 +10,7 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import com.academy.bangkit.mystoryapp.R
 import com.academy.bangkit.mystoryapp.createFile
 import com.academy.bangkit.mystoryapp.databinding.ActivityCameraBinding
 import com.academy.bangkit.mystoryapp.ui.story.post.PostStoryActivity
@@ -58,7 +59,11 @@ class CameraActivity : AppCompatActivity() {
                 cameraProvider.unbindAll()
                 cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
             } catch (e: Exception) {
-                Toast.makeText(this@CameraActivity, "Gagal memunculkan kamera", Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    this@CameraActivity,
+                    getString(R.string.err_camera),
+                    Toast.LENGTH_SHORT
+                )
                     .show()
             }
         }, ContextCompat.getMainExecutor(this))
@@ -77,7 +82,7 @@ class CameraActivity : AppCompatActivity() {
                 override fun onError(exception: ImageCaptureException) {
                     Toast.makeText(
                         this@CameraActivity,
-                        "Gagal mengambil gambar",
+                        getString(R.string.err_take_picture),
                         Toast.LENGTH_SHORT
                     ).show()
                 }

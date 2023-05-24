@@ -6,6 +6,7 @@
     <string name="signup">Daftar</string>
     <string name="login">Masuk</string>
     <string name="logout">Keluar</string>
+    <string name="language">Bahasa</string>
 
     <string name="field_password">Kata sandi terlalu pendek (minimal 8 karakter)</string>
     <string name="field_email">Format email tidak sesuai</string>
@@ -15,6 +16,10 @@
     <string name="err_password_field">Password tidak boleh kosong</string>
     <string name="err_description_field">Deskripsi tidak boleh kosong</string>
     <string name="err_image_field">Foto tidak boleh kosong</string>
+    <string name="err_permission">Izin tidak diberikan</string>
+    <string name="err_take_picture">Terjadi kesalahan saat mengambil gambar</string>
+    <string name="err_camera">Gagal menampilkan kamera</string>
+    <string name="err_story_message">Cerita tidak ditemukan.</string>
 
     <string name="signup_success_message">Registrasi berhasil!</string>
     <string name="post_story_success_message">Cerita berhasil diposting!</string>

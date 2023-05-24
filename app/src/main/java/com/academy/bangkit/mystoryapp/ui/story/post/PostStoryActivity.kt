@@ -25,7 +25,7 @@ import com.academy.bangkit.mystoryapp.data.network.response.CommonResponse
 import com.academy.bangkit.mystoryapp.databinding.ActivityPostStoryBinding
 import com.academy.bangkit.mystoryapp.reduceFileImage
 import com.academy.bangkit.mystoryapp.rotateFile
-import com.academy.bangkit.mystoryapp.ui.UserViewModelFactory
+import com.academy.bangkit.mystoryapp.ui.ViewModelFactory
 import com.academy.bangkit.mystoryapp.ui.camera.CameraActivity
 import com.academy.bangkit.mystoryapp.uriToFile
 import com.academy.bangkit.mystoryapp.data.Result
@@ -36,7 +36,7 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 class PostStoryActivity : AppCompatActivity() {
 
     private val postStoryViewModel by viewModels<PostStoryViewModel> {
-        UserViewModelFactory(UserPreferences.getInstance(dataStore))
+        ViewModelFactory(UserPreferences.getInstance(dataStore))
     }
 
     private lateinit var binding: ActivityPostStoryBinding
@@ -50,7 +50,7 @@ class PostStoryActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_CODE_PERMISSIONS) {
             if (!allPermissionGranted()) {
-                Toast.makeText(this, "Tidak mendapatkan permission", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.err_permission), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -121,7 +121,6 @@ class PostStoryActivity : AppCompatActivity() {
             }
 
             uploadBtn.setOnClickListener {
-                setupUpload()
             }
         }
     }

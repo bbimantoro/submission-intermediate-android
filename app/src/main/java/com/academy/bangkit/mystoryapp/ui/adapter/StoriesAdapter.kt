@@ -8,30 +8,33 @@ import android.widget.ImageView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.academy.bangkit.mystoryapp.R
 import com.academy.bangkit.mystoryapp.data.network.response.Story
 import com.academy.bangkit.mystoryapp.databinding.ItemStoryBinding
 import com.academy.bangkit.mystoryapp.ui.story.detail.DetailStoryActivity
+import com.academy.bangkit.mystoryapp.utils.StoryDiffCallback
 import com.bumptech.glide.Glide
 
-class StoryAdapter :
-    ListAdapter<Story, StoryAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class StoriesAdapter :
+    RecyclerView.Adapter<StoriesAdapter.StoryViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MyViewHolder(
+    private val listStory = ArrayList<Story>()
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = StoryViewHolder(
         ItemStoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     )
 
+    override fun getItemCount() = listStory.size
 
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val data = getItem(position)
-
+    override fun onBindViewHolder(holder: StoryViewHolder, position: Int) {
+        val data = listStory[position]
         holder.bind(data)
     }
 
-    inner class MyViewHolder(private var binding: ItemStoryBinding) :
+    inner class StoryViewHolder(private var binding: ItemStoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
         fun bind(data: Story) {
             binding.apply {
                 thumbnailIv.loadImage(data.photoUrl)
@@ -57,6 +60,7 @@ class StoryAdapter :
                 itemView.context.startActivity(intent, optionsCompat.toBundle())
             }
         }
+
     }
 
     private fun ImageView.loadImage(url: String?) {
@@ -67,16 +71,12 @@ class StoryAdapter :
             .into(this)
     }
 
-    companion object {
-        val DIFF_CALLBACK: DiffUtil.ItemCallback<Story> =
-            object : DiffUtil.ItemCallback<Story>() {
-                override fun areItemsTheSame(oldItem: Story, newItem: Story): Boolean {
-                    return oldItem.id == newItem.id
-                }
-
-                override fun areContentsTheSame(oldItem: Story, newItem: Story): Boolean {
-                    return oldItem == newItem
-                }
-            }
+    fun setListStory(newListStory: List<Story>) {
+        val diffCallback = StoryDiffCallback(listStory, newListStory)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        listStory.clear()
+        listStory.addAll(newListStory)
+        diffResult.dispatchUpdatesTo(this)
     }
+
 }

@@ -16,15 +16,16 @@ import com.academy.bangkit.mystoryapp.data.Result
 import com.academy.bangkit.mystoryapp.data.UserPreferences
 import com.academy.bangkit.mystoryapp.data.network.response.LoginResponse
 import com.academy.bangkit.mystoryapp.databinding.ActivityLoginBinding
-import com.academy.bangkit.mystoryapp.ui.UserViewModelFactory
-import com.academy.bangkit.mystoryapp.ui.main.MainActivity
+import com.academy.bangkit.mystoryapp.ui.ViewModelFactory
+import com.academy.bangkit.mystoryapp.ui.story.main.MainActivity
+import com.academy.bangkit.mystoryapp.ui.welcome.WelcomeActivity
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "token")
 
 class LoginActivity : AppCompatActivity() {
 
     private val loginViewModel by viewModels<LoginViewModel> {
-        UserViewModelFactory(UserPreferences.getInstance(dataStore))
+        ViewModelFactory(UserPreferences.getInstance(dataStore))
     }
 
     private lateinit var binding: ActivityLoginBinding
@@ -37,6 +38,22 @@ class LoginActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         setupAction()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        initialCheckAuth()
+    }
+
+    private fun initialCheckAuth() {
+        loginViewModel.checkIsLogin().observe(this) {
+            if (it) {
+                val intent = Intent(this, WelcomeActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+                finish()
+            }
+        }
     }
 
     private fun setupAction() {
@@ -83,6 +100,7 @@ class LoginActivity : AppCompatActivity() {
             }
 
             is Result.Error -> {
+                binding.progressbar.visibility = View.GONE
                 Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
             }
         }
