@@ -1,7 +1,6 @@
 package com.academy.bangkit.mystoryapp.data.network.retrofit
 
 import com.academy.bangkit.mystoryapp.data.network.response.CommonResponse
-import com.academy.bangkit.mystoryapp.data.network.response.DetailStoryResponse
 import com.academy.bangkit.mystoryapp.data.network.response.LoginResponse
 import com.academy.bangkit.mystoryapp.data.network.response.StoryResponse
 import okhttp3.MultipartBody

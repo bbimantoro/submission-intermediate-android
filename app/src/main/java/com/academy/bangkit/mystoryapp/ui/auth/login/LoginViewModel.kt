@@ -4,13 +4,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.academy.bangkit.mystoryapp.data.Result
 import com.academy.bangkit.mystoryapp.data.UserPreferences
 import com.academy.bangkit.mystoryapp.data.network.response.LoginResponse
 import com.academy.bangkit.mystoryapp.data.network.retrofit.ApiConfig
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class LoginViewModel(private val pref: UserPreferences) : ViewModel() {
@@ -37,14 +35,16 @@ class LoginViewModel(private val pref: UserPreferences) : ViewModel() {
         }
     }
 
-    fun saveToken(token: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            pref.saveToken(token)
+    fun setLogin(session: Boolean) {
+        viewModelScope.launch {
+            pref.setLogin(session)
         }
     }
 
-    fun checkIsLogin(): LiveData<Boolean> {
-        return pref.isLogin().asLiveData()
+    fun saveToken(token: String) {
+        viewModelScope.launch {
+            pref.saveToken(token)
+        }
     }
 
     companion object {

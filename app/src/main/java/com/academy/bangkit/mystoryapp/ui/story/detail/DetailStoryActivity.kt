@@ -1,9 +1,6 @@
 package com.academy.bangkit.mystoryapp.ui.story.detail
 
-import android.os.Build
 import android.os.Bundle
-import android.view.WindowInsets
-import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.academy.bangkit.mystoryapp.R
 import com.academy.bangkit.mystoryapp.databinding.ActivityDetailStoryBinding
@@ -22,6 +19,7 @@ class DetailStoryActivity : AppCompatActivity() {
 
         setupData()
     }
+
     private fun setupData() {
         val photoUrl = intent.getStringExtra(PHOTO_URL_EXTRA)
         val name = intent.getStringExtra(NAME_EXTRA)
@@ -39,7 +37,7 @@ class DetailStoryActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
+        onBackPressedDispatcher.onBackPressed()
         return true
     }
 

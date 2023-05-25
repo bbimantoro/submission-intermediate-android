@@ -1,16 +1,11 @@
 package com.academy.bangkit.mystoryapp.ui.welcome
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.asLiveData
 import com.academy.bangkit.mystoryapp.data.UserPreferences
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class WelcomeViewModel(private val pref: UserPreferences) : ViewModel() {
 
-    fun setIsLogin(isLogin: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
-            pref.setIsLogin(isLogin)
-        }
-    }
+    fun checkIsLogin(): LiveData<Boolean> = pref.getLogin().asLiveData()
 }

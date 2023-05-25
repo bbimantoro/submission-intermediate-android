@@ -11,8 +11,6 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.view.WindowInsets
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -98,10 +96,10 @@ class PostStoryActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        checkUserSession()
+        checkUserToken()
     }
 
-    private fun checkUserSession() {
+    private fun checkUserToken() {
         postStoryViewModel.getToken().observe(this) { token ->
             if (token.isEmpty()) {
                 val intent = Intent(this, LoginActivity::class.java).apply {
@@ -211,7 +209,7 @@ class PostStoryActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
+        onBackPressedDispatcher.onBackPressed()
         return super.onSupportNavigateUp()
     }
 

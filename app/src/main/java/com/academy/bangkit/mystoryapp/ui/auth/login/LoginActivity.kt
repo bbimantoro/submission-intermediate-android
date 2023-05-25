@@ -3,7 +3,6 @@ package com.academy.bangkit.mystoryapp.ui.auth.login
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -11,6 +10,7 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
@@ -21,7 +21,6 @@ import com.academy.bangkit.mystoryapp.data.network.response.LoginResponse
 import com.academy.bangkit.mystoryapp.databinding.ActivityLoginBinding
 import com.academy.bangkit.mystoryapp.ui.ViewModelFactory
 import com.academy.bangkit.mystoryapp.ui.story.main.MainActivity
-import com.academy.bangkit.mystoryapp.ui.welcome.WelcomeActivity
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "token")
 
@@ -30,6 +29,7 @@ class LoginActivity : AppCompatActivity() {
     private val loginViewModel by viewModels<LoginViewModel> {
         ViewModelFactory(UserPreferences.getInstance(dataStore))
     }
+
 
     private lateinit var binding: ActivityLoginBinding
 
@@ -44,6 +44,8 @@ class LoginActivity : AppCompatActivity() {
         setupAction()
 
         loginViewModel.result.observe(this) { result -> observerLogin(result) }
+
+        loginViewModel.setLogin(false)
     }
 
     private fun setupView() {
@@ -57,22 +59,6 @@ class LoginActivity : AppCompatActivity() {
             )
         }
         supportActionBar?.hide()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        initialCheckAuth()
-    }
-
-    private fun initialCheckAuth() {
-        loginViewModel.checkIsLogin().observe(this) {
-            if (it) {
-                val intent = Intent(this, WelcomeActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-                finish()
-            }
-        }
     }
 
     private fun setupAction() {

@@ -6,11 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.academy.bangkit.mystoryapp.data.UserPreferences
 import com.academy.bangkit.mystoryapp.data.Result
+import com.academy.bangkit.mystoryapp.data.UserPreferences
 import com.academy.bangkit.mystoryapp.data.network.response.Story
 import com.academy.bangkit.mystoryapp.data.network.retrofit.ApiConfig
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainViewModel(
@@ -42,8 +41,15 @@ class MainViewModel(
         return pref.getToken().asLiveData()
     }
 
+    fun setLogin(session: Boolean) {
+        viewModelScope.launch {
+            pref.setLogin(session)
+        }
+    }
+
+
     fun logout() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             pref.destroyToken()
         }
     }

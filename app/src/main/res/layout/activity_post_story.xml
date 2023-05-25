@@ -24,7 +24,6 @@
 
     <Button
         android:id="@+id/cameraBtn"
-        style="?attr/materialButtonOutlinedStyle"
         android:layout_width="@dimen/default_size"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_l"
@@ -38,7 +37,6 @@
 
     <Button
         android:id="@+id/galleryBtn"
-        style="?attr/materialButtonOutlinedStyle"
         android:layout_width="@dimen/default_size"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_m"

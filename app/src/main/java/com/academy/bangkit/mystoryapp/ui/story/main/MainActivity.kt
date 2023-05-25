@@ -2,15 +2,12 @@ package com.academy.bangkit.mystoryapp.ui.story.main
 
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.WindowInsets
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.datastore.core.DataStore
@@ -63,14 +60,16 @@ class MainActivity : AppCompatActivity() {
             observerMainStory(result)
         }
 
+        mainViewModel.setLogin(true)
+
     }
 
     override fun onResume() {
         super.onResume()
-        checkUserSession()
+        checkUserToken()
     }
 
-    private fun checkUserSession() {
+    private fun checkUserToken() {
         mainViewModel.getToken().observe(this) { token ->
             if (token.isEmpty()) {
                 val intent = Intent(this, LoginActivity::class.java).apply {

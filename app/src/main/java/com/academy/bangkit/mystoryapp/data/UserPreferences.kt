@@ -28,15 +28,15 @@ class UserPreferences private constructor(private val dataStore: DataStore<Prefe
         }
     }
 
-    suspend fun setIsLogin(session: Boolean) {
+    suspend fun setLogin(session: Boolean) {
         dataStore.edit {
             it[SESSION_KEY] = session
         }
     }
 
-    fun isLogin(): Flow<Boolean> {
+    fun getLogin(): Flow<Boolean> {
         return dataStore.data.map {
-            it[SESSION_KEY] ?: false
+            it[SESSION_KEY] ?: true
         }
     }
 
