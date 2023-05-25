@@ -2,6 +2,9 @@
     <string name="app_name" translatable="false">MyStoryApp</string>
     <string name="title_welcome_page">Welcome to Dicoding Stories!</string>
     <string name="desc_welcome_page">Explore a collection of learning stories from Dicoding students and graduates.</string>
+    <string name="label_home">Home</string>
+    <string name="label_detail">Detail Story</string>
+    <string name="label_post">Post Story</string>
 
     <string name="signup">Sign Up</string>
     <string name="login">Log In</string>

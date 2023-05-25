@@ -2,6 +2,9 @@
 <resources>
     <string name="title_welcome_page">Selamat datang di Dicoding Story!</string>
     <string name="desc_welcome_page">Jelajahi kumpulan cerita belajar dari siswa dan lulusan Dicoding.</string>
+    <string name="label_home">Beranda</string>
+    <string name="label_detail">Detail Cerita</string>
+    <string name="label_post">Posting Cerita</string>
 
     <string name="signup">Daftar</string>
     <string name="login">Masuk</string>

@@ -12,6 +12,7 @@
         android:layout_height="@dimen/image_size"
         android:layout_marginStart="@dimen/margin_l"
         android:layout_marginEnd="@dimen/margin_l"
+        android:alpha="0"
         app:layout_constraintBottom_toTopOf="@+id/horizontalGuideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,6 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_l"
         android:layout_marginTop="@dimen/margin_s"
+        android:alpha="0"
         android:text="@string/title_welcome_page"
         android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
         android:textStyle="bold"
@@ -38,6 +40,7 @@
         android:layout_marginStart="@dimen/margin_l"
         android:layout_marginTop="@dimen/margin_s"
         android:layout_marginEnd="@dimen/margin_l"
+        android:alpha="0"
         android:text="@string/desc_welcome_page"
         android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
         app:layout_constraintEnd_toEndOf="parent"
@@ -51,28 +54,28 @@
         android:layout_marginStart="@dimen/margin_l"
         android:layout_marginTop="@dimen/margin_l"
         android:layout_marginEnd="@dimen/margin_l"
+        android:alpha="0"
         android:text="@string/signup"
-        app:shapeAppearance="@style/roundCorner"
-        app:backgroundTint="@color/orange_500"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/descTv" />
+        app:layout_constraintTop_toBottomOf="@+id/descTv"
+        app:shapeAppearance="@style/roundCorner" />
 
 
     <Button
         android:id="@+id/loginBtn"
         style="?attr/materialButtonOutlinedStyle"
         android:layout_width="@dimen/default_size"
-        app:shapeAppearance="@style/roundCorner"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_l"
         android:layout_marginTop="@dimen/margin_s"
         android:layout_marginEnd="@dimen/margin_l"
+        android:alpha="0"
         android:text="@string/login"
-        android:textColor="@color/orange_500"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signupBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/signupBtn"
+        app:shapeAppearance="@style/roundCorner" />
 
 
     <androidx.constraintlayout.widget.Guideline

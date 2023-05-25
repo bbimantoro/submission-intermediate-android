@@ -13,9 +13,9 @@
 
     <ImageView
         android:id="@+id/captureIv"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginBottom="16dp"
+        android:layout_width="@dimen/capture_size"
+        android:layout_height="@dimen/capture_size"
+        android:layout_marginBottom="@dimen/margin_m"
         android:contentDescription="@string/content_desc_capture"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,10 +24,10 @@
 
     <ImageView
         android:id="@+id/switchCamera"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_width="@dimen/switch_camera_size"
+        android:layout_height="@dimen/switch_camera_size"
+        android:layout_marginTop="@dimen/margin_m"
+        android:layout_marginEnd="@dimen/margin_m"
         android:contentDescription="@string/content_desc_switch_camera"
         app:layout_constraintEnd_toEndOf="@+id/viewFinder"
         app:layout_constraintTop_toTopOf="parent"

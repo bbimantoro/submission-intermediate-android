@@ -6,17 +6,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:layout_margin="16dp">
+    android:layout_margin="@dimen/margin_m"
+    android:clickable="true"
+    android:focusable="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp">
+        android:padding="@dimen/padding_s">
 
         <ImageView
             android:id="@+id/thumbnailIv"
-            android:layout_width="0dp"
-            android:layout_height="194dp"
+            android:layout_width="@dimen/default_size"
+            android:layout_height="@dimen/thumbnail_height_size"
             android:contentDescription="@string/content_desc_image"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
@@ -26,11 +28,11 @@
 
         <TextView
             android:id="@+id/nameTv"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/default_size"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="@dimen/margin_s"
+            android:layout_marginTop="@dimen/margin_m"
+            android:layout_marginEnd="@dimen/margin_s"
             android:text="@string/name"
             android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
             app:layout_constraintEnd_toEndOf="parent"
@@ -39,11 +41,11 @@
 
         <TextView
             android:id="@+id/descTv"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/default_size"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="@dimen/margin_s"
+            android:layout_marginTop="@dimen/margin_s"
+            android:layout_marginEnd="@dimen/margin_s"
             android:ellipsize="end"
             android:maxLines="3"
             android:text="@string/desc"

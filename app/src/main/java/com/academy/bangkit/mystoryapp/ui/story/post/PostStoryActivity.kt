@@ -11,6 +11,8 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.WindowInsets
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -67,6 +69,9 @@ class PostStoryActivity : AppCompatActivity() {
         postStoryBinding = ActivityPostStoryBinding.inflate(layoutInflater)
         setContentView(postStoryBinding.root)
 
+        supportActionBar?.title = getString(R.string.label_post)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         if (!allPermissionGranted()) {
             ActivityCompat.requestPermissions(
                 this,
@@ -88,6 +93,7 @@ class PostStoryActivity : AppCompatActivity() {
         postStoryViewModel.result.observe(this) { result ->
             observerPostStory(result)
         }
+
     }
 
     override fun onResume() {
@@ -202,6 +208,11 @@ class PostStoryActivity : AppCompatActivity() {
                     .into(it)
             }
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
     }
 
     companion object {

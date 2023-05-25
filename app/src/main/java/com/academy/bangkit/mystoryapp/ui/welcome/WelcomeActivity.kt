@@ -1,10 +1,13 @@
 package com.academy.bangkit.mystoryapp.ui.welcome
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.activity.viewModels
@@ -32,10 +35,28 @@ class WelcomeActivity : AppCompatActivity() {
         binding = ActivityWelcomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        welcomeViewModel.setIsLogin(false)
-
         setupView()
         setupAction()
+        playAnimation()
+
+        welcomeViewModel.setIsLogin(false)
+    }
+
+    private fun playAnimation() {
+        val welcomeIv = ObjectAnimator.ofFloat(binding.WelcomeIv, View.ALPHA, 1f)
+        val title = ObjectAnimator.ofFloat(binding.TitleTv, View.ALPHA, 1f).setDuration(500)
+        val desc = ObjectAnimator.ofFloat(binding.descTv, View.ALPHA, 1f).setDuration(500)
+        val loginBtn = ObjectAnimator.ofFloat(binding.loginBtn, View.ALPHA, 1f).setDuration(500)
+        val signupBtn = ObjectAnimator.ofFloat(binding.signupBtn, View.ALPHA, 1f).setDuration(500)
+
+        val together = AnimatorSet().apply {
+            playTogether(loginBtn, signupBtn)
+        }
+
+        AnimatorSet().apply {
+            playSequentially(welcomeIv, title, desc, together)
+            start()
+        }
     }
 
     private fun setupView() {

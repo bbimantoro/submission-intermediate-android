@@ -2,7 +2,16 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.MyStoryApp" parent="Theme.Material3.DayNight">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/primary_color</item> -->
+        <item name="colorPrimary">@color/orange_500</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+        <item name="colorSecondary">@color/orange_200</item>
+        <item name="colorOnSecondary">@color/white</item>
+
+        <item name="colorPrimaryContainer">@color/orange_100</item>
+        <item name="colorOnPrimaryContainer">@color/black</item>
+
+        <item name="android:statusBarColor">@color/black</item>
     </style>
 
     <style name="Theme.MyStoryApp" parent="Base.Theme.MyStoryApp" />

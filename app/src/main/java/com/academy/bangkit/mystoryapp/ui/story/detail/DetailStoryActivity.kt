@@ -1,7 +1,10 @@
 package com.academy.bangkit.mystoryapp.ui.story.detail
 
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
 import android.os.Bundle
+import android.view.WindowInsets
+import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
 import com.academy.bangkit.mystoryapp.R
 import com.academy.bangkit.mystoryapp.databinding.ActivityDetailStoryBinding
 import com.bumptech.glide.Glide
@@ -14,9 +17,11 @@ class DetailStoryActivity : AppCompatActivity() {
         detailBinding = ActivityDetailStoryBinding.inflate(layoutInflater)
         setContentView(detailBinding.root)
 
+        supportActionBar?.title = getString(R.string.label_detail)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         setupData()
     }
-
     private fun setupData() {
         val photoUrl = intent.getStringExtra(PHOTO_URL_EXTRA)
         val name = intent.getStringExtra(NAME_EXTRA)
@@ -31,6 +36,11 @@ class DetailStoryActivity : AppCompatActivity() {
             nameTv.text = name
             descTv.text = description
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
     companion object {
