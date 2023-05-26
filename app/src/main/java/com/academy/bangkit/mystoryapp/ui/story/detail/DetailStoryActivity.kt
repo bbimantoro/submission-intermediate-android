@@ -1,14 +1,22 @@
 package com.academy.bangkit.mystoryapp.ui.story.detail
 
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.academy.bangkit.mystoryapp.R
 import com.academy.bangkit.mystoryapp.databinding.ActivityDetailStoryBinding
+import com.academy.bangkit.mystoryapp.utils.rotateBitmap
+import com.academy.bangkit.mystoryapp.utils.uriToFile
 import com.bumptech.glide.Glide
+import java.io.File
 
 class DetailStoryActivity : AppCompatActivity() {
 
     private lateinit var detailBinding: ActivityDetailStoryBinding
+
+    private var getFile: File? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         detailBinding = ActivityDetailStoryBinding.inflate(layoutInflater)
@@ -26,9 +34,7 @@ class DetailStoryActivity : AppCompatActivity() {
         val description = intent.getStringExtra(DESC_EXTRA)
 
 
-        Glide.with(this)
-            .load(photoUrl)
-            .into(detailBinding.thumbnailIv)
+        Glide.with(this).load(photoUrl).into(detailBinding.thumbnailIv)
 
         detailBinding.apply {
             nameTv.text = name

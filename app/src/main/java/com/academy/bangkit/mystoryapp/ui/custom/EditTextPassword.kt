@@ -31,7 +31,7 @@ class EditTextPassword : AppCompatEditText {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.length < 6) {
+                if (s.length < 8) {
                     this@EditTextPassword.error = resources.getString(R.string.field_password)
                 } else {
                     this@EditTextPassword.error = null
