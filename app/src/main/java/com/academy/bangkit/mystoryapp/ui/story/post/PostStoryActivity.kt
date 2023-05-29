@@ -171,12 +171,12 @@ class PostStoryActivity : AppCompatActivity() {
     ) { result ->
         if (result.resultCode == CAMERA_RESULT) {
             val myFile = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                result.data?.getSerializableExtra("picture", File::class.java)
+                result.data?.getSerializableExtra(PICTURE_EXTRA, File::class.java)
             } else {
                 @Suppress("DEPRECATION")
-                result.data?.getSerializableExtra("picture")
+                result.data?.getSerializableExtra(PICTURE_EXTRA)
             } as? File
-            val isBackCamera = result.data?.getBooleanExtra("isBackCamera", true) as Boolean
+            val isBackCamera = result.data?.getBooleanExtra(IS_BACK_CAMERA_EXTRA, true) as Boolean
 
             getFile = myFile
 
@@ -215,6 +215,8 @@ class PostStoryActivity : AppCompatActivity() {
 
     companion object {
         const val CAMERA_RESULT = 200
+        const val PICTURE_EXTRA = "picture_extra"
+        const val IS_BACK_CAMERA_EXTRA = "is_back_camera_extra"
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
         private const val REQUEST_CODE_PERMISSIONS = 10
     }

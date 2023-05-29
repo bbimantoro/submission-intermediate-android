@@ -19,7 +19,7 @@ import java.io.File
 
 class PostStoryViewModel(private val userPreferences: UserPreferences) : ViewModel() {
 
-    private var _result = MutableLiveData<Result<CommonResponse>>()
+    private val _result = MutableLiveData<Result<CommonResponse>>()
     val result: LiveData<Result<CommonResponse>> = _result
 
     fun addNewStory(token: String, photo: File, description: String) {
@@ -48,11 +48,11 @@ class PostStoryViewModel(private val userPreferences: UserPreferences) : ViewMod
                 }
 
             } catch (e: Exception) {
-                Log.d("PostStoryViewModel", "addNewStory: ${e.message.toString()}")
                 _result.value = Result.Error(e.message.toString())
             }
         }
     }
+
     fun getToken(): LiveData<String> {
         return userPreferences.getToken().asLiveData()
     }

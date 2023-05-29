@@ -16,7 +16,7 @@ class MainViewModel(
     private val pref: UserPreferences
 ) : ViewModel() {
 
-    private var _result = MutableLiveData<Result<List<Story>>>()
+    private val _result = MutableLiveData<Result<List<Story>>>()
     val result: LiveData<Result<List<Story>>> = _result
 
     fun getAllStories(token: String) {
@@ -31,7 +31,6 @@ class MainViewModel(
                     _result.value = Result.Success(response.listStory)
                 }
             } catch (e: Exception) {
-                Log.d("MainViewModel", "getAllStories: ${e.message.toString()}")
                 _result.value = Result.Error(e.message.toString())
             }
         }

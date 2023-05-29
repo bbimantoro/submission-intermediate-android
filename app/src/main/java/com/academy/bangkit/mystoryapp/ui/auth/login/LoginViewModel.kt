@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel(private val pref: UserPreferences) : ViewModel() {
 
-    private var _result = MutableLiveData<Result<LoginResponse>>()
+    private val _result = MutableLiveData<Result<LoginResponse>>()
     val result: LiveData<Result<LoginResponse>> = _result
 
     fun login(email: String, password: String) {
@@ -29,7 +29,6 @@ class LoginViewModel(private val pref: UserPreferences) : ViewModel() {
                 }
 
             } catch (e: Exception) {
-                Log.d(TAG, "login: ${e.message.toString()}")
                 _result.value = Result.Error(e.message.toString())
             }
         }
@@ -45,9 +44,5 @@ class LoginViewModel(private val pref: UserPreferences) : ViewModel() {
         viewModelScope.launch {
             pref.saveToken(token)
         }
-    }
-
-    companion object {
-        const val TAG = "LoginViewModel"
     }
 }

@@ -27,13 +27,8 @@ class SignupViewModel : ViewModel() {
                 }
 
             } catch (e: Exception) {
-                Log.d(TAG, "signup: ${e.message.toString()}")
                 _result.value = Result.Error(e.message.toString())
             }
         }
-    }
-
-    companion object {
-        private const val TAG = "SignupViewModel"
     }
 }
