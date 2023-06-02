@@ -6,13 +6,16 @@
     <string name="label_detail">Detail Story</string>
     <string name="label_post">Post Story</string>
 
+    <string name="tab_text_1" translatable="false">Feed</string>
+    <string name="tab_text_2" translatable="false">Maps</string>
+
     <string name="signup">Sign Up</string>
     <string name="login">Log In</string>
     <string name="logout">Log Out</string>
     <string name="language">Language</string>
 
     <string name="field_password">Password is too short (minimum is 8 characters)</string>
-    <string name="field_email">Incorrect Email format</string>
+    <string name="field_email">Invalid email format</string>
 
     <string name="err_name_field">Name can\'t be blank</string>
     <string name="err_email_field">Email can\'t be blank</string>
@@ -45,5 +48,7 @@
     <string name="desc">Description</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

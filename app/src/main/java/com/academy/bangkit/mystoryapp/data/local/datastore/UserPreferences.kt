@@ -1,4 +1,4 @@
-package com.academy.bangkit.mystoryapp.data
+package com.academy.bangkit.mystoryapp.data.local.datastore
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences

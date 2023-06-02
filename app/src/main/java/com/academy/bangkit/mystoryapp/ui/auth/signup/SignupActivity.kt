@@ -13,12 +13,15 @@ import com.academy.bangkit.mystoryapp.R
 import com.academy.bangkit.mystoryapp.data.Result
 import com.academy.bangkit.mystoryapp.data.network.response.CommonResponse
 import com.academy.bangkit.mystoryapp.databinding.ActivitySignupBinding
+import com.academy.bangkit.mystoryapp.ui.ViewModelFactory
 import com.academy.bangkit.mystoryapp.ui.auth.login.LoginActivity
 
 class SignupActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignupBinding
-    private val signupViewModel by viewModels<SignupViewModel>()
+    private val signupViewModel by viewModels<SignupViewModel> {
+        ViewModelFactory.getInstance(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

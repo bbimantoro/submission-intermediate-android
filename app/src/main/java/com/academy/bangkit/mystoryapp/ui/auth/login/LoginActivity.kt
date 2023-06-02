@@ -1,6 +1,5 @@
 package com.academy.bangkit.mystoryapp.ui.auth.login
 
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -11,23 +10,17 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
 import com.academy.bangkit.mystoryapp.R
 import com.academy.bangkit.mystoryapp.data.Result
-import com.academy.bangkit.mystoryapp.data.UserPreferences
 import com.academy.bangkit.mystoryapp.data.network.response.LoginResponse
 import com.academy.bangkit.mystoryapp.databinding.ActivityLoginBinding
 import com.academy.bangkit.mystoryapp.ui.ViewModelFactory
 import com.academy.bangkit.mystoryapp.ui.story.main.MainActivity
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "token")
-
 class LoginActivity : AppCompatActivity() {
 
     private val loginViewModel by viewModels<LoginViewModel> {
-        ViewModelFactory(UserPreferences.getInstance(dataStore))
+        ViewModelFactory.getInstance(this)
     }
 
 
@@ -45,7 +38,6 @@ class LoginActivity : AppCompatActivity() {
 
         loginViewModel.result.observe(this) { result -> observerLogin(result) }
 
-        loginViewModel.setLogin(false)
     }
 
     private fun setupView() {
@@ -63,11 +55,11 @@ class LoginActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.loginBtn.setOnClickListener {
-            val name = binding.emailEdt.text.toString()
+            val email = binding.emailEdt.text.toString()
             val password = binding.passwordEdt.text.toString()
 
             when {
-                name.isEmpty() -> {
+                email.isEmpty() -> {
                     binding.emailEdt.error = getString(R.string.err_email_field)
                 }
 
@@ -76,7 +68,7 @@ class LoginActivity : AppCompatActivity() {
                 }
 
                 else -> {
-                    loginViewModel.login(name, password)
+                    loginViewModel.login(email, password)
                 }
             }
         }
@@ -87,11 +79,7 @@ class LoginActivity : AppCompatActivity() {
             is Result.Success -> {
                 binding.progressbar.visibility = View.GONE
 
-                val data = result.data.loginResult?.token
-                data?.let {
-                    loginViewModel.saveToken(it)
-                }
-                Log.d("LoginActivity", "token: $data")
+                Log.d("LoginActivity", "token: ${result.data.loginResult?.token}")
 
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)

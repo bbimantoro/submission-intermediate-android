@@ -14,7 +14,7 @@ import androidx.activity.viewModels
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import com.academy.bangkit.mystoryapp.data.UserPreferences
+import com.academy.bangkit.mystoryapp.data.local.datastore.UserPreferences
 import com.academy.bangkit.mystoryapp.databinding.ActivityWelcomeBinding
 import com.academy.bangkit.mystoryapp.ui.ViewModelFactory
 import com.academy.bangkit.mystoryapp.ui.auth.login.LoginActivity
@@ -36,18 +36,26 @@ class WelcomeActivity : AppCompatActivity() {
         binding = ActivityWelcomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        welcomeViewModel.checkIsLogin().observe(this) { isLogin ->
-            if (isLogin) {
+
+        setupView()
+        setupAction()
+        playAnimation()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        checkIsLogin()
+    }
+
+    private fun checkIsLogin() {
+        welcomeViewModel.isLogin().observe(this) {
+            if (it) {
                 val intent = Intent(this, MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
                 finish()
             }
         }
-
-        setupView()
-        setupAction()
-        playAnimation()
     }
 
     private fun setupView() {

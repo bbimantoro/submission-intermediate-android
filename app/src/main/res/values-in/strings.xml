@@ -12,7 +12,7 @@
     <string name="language">Bahasa</string>
 
     <string name="field_password">Kata sandi terlalu pendek (minimal 8 karakter)</string>
-    <string name="field_email">Format email tidak sesuai</string>
+    <string name="field_email">Format email tidak valid</string>
 
     <string name="err_name_field">Nama tidak boleh kosong</string>
     <string name="err_email_field">Email tidak boleh kosong</string>

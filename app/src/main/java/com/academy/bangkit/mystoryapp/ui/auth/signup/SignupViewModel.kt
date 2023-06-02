@@ -8,26 +8,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.academy.bangkit.mystoryapp.data.network.response.CommonResponse
 import com.academy.bangkit.mystoryapp.data.network.retrofit.ApiConfig
+import com.academy.bangkit.mystoryapp.data.repository.StoryRepository
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class SignupViewModel : ViewModel() {
+class SignupViewModel(private val storyRepository: StoryRepository) : ViewModel() {
     private val _result = MutableLiveData<Result<CommonResponse>>()
     val result: LiveData<Result<CommonResponse>> = _result
 
     fun signup(name: String, email: String, password: String) {
         viewModelScope.launch {
-            _result.value = Result.Loading
-            try {
-                val response = ApiConfig.getApiService().signup(name, email, password)
-
-                if (response.error) {
-                    _result.value = Result.Error(response.message)
-                } else {
-                    _result.value = Result.Success(response)
-                }
-
-            } catch (e: Exception) {
-                _result.value = Result.Error(e.message.toString())
+            storyRepository.signup(name, email, password).collect {
+                _result.value = it
             }
         }
     }

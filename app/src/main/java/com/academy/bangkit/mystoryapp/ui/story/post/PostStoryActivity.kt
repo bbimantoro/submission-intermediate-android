@@ -20,7 +20,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import com.academy.bangkit.mystoryapp.R
-import com.academy.bangkit.mystoryapp.data.UserPreferences
+import com.academy.bangkit.mystoryapp.data.local.datastore.UserPreferences
 import com.academy.bangkit.mystoryapp.data.network.response.CommonResponse
 import com.academy.bangkit.mystoryapp.databinding.ActivityPostStoryBinding
 import com.academy.bangkit.mystoryapp.utils.reduceFileImage
@@ -96,10 +96,10 @@ class PostStoryActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        checkUserToken()
+        isValidUserToken()
     }
 
-    private fun checkUserToken() {
+    private fun isValidUserToken() {
         postStoryViewModel.getToken().observe(this) { token ->
             if (token.isEmpty()) {
                 val intent = Intent(this, LoginActivity::class.java).apply {
