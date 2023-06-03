@@ -6,36 +6,34 @@
     android:layout_height="match_parent"
     tools:context=".ui.story.main.HomeFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/storyRv"
-        android:layout_width="@dimen/default_size"
-        android:layout_height="@dimen/default_size"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/storyRv"
+            android:layout_width="@dimen/default_size"
+            android:layout_height="@dimen/default_size"
+            tools:listitem="@layout/item_story" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addStoryFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_m"
+        android:contentDescription="@string/content_desc_fab"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/item_story" />
+        app:srcCompat="@drawable/add_24" />
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/progressbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:indeterminate="true"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible" />
-
-
-    <TextView
-        android:id="@+id/emptyStoryTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/err_story_message"
-        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
-        android:textStyle="bold"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -98,7 +98,6 @@ class StoryRepository(
     }.flowOn(Dispatchers.IO)
 
     fun addNewStory(
-        token: String,
         photo: File,
         description: String,
         lat: Float?,

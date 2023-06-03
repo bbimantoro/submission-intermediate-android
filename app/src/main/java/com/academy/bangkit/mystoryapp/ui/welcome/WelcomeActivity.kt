@@ -26,7 +26,7 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 class WelcomeActivity : AppCompatActivity() {
 
     private val welcomeViewModel by viewModels<WelcomeViewModel> {
-        ViewModelFactory(UserPreferences.getInstance(dataStore))
+        ViewModelFactory.getInstance(this)
     }
 
     private lateinit var binding: ActivityWelcomeBinding
@@ -36,26 +36,18 @@ class WelcomeActivity : AppCompatActivity() {
         binding = ActivityWelcomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-        setupView()
-        setupAction()
-        playAnimation()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        checkIsLogin()
-    }
-
-    private fun checkIsLogin() {
-        welcomeViewModel.isLogin().observe(this) {
-            if (it) {
+        welcomeViewModel.isLogin().observe(this) { isLogin ->
+            if (isLogin) {
                 val intent = Intent(this, MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
                 finish()
             }
         }
+
+        setupView()
+        setupAction()
+        playAnimation()
     }
 
     private fun setupView() {

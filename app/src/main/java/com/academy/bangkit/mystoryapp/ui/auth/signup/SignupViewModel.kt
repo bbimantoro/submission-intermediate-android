@@ -13,13 +13,13 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class SignupViewModel(private val storyRepository: StoryRepository) : ViewModel() {
-    private val _result = MutableLiveData<Result<CommonResponse>>()
-    val result: LiveData<Result<CommonResponse>> = _result
+    private val _signupResult = MutableLiveData<Result<CommonResponse>>()
+    val signupResult: LiveData<Result<CommonResponse>> = _signupResult
 
     fun signup(name: String, email: String, password: String) {
         viewModelScope.launch {
             storyRepository.signup(name, email, password).collect {
-                _result.value = it
+                _signupResult.value = it
             }
         }
     }

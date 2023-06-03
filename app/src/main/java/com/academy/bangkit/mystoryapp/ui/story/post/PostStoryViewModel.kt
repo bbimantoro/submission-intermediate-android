@@ -16,14 +16,13 @@ class PostStoryViewModel(private val storyRepository: StoryRepository) : ViewMod
     val result: LiveData<Result<CommonResponse>> = _result
 
     fun addNewStory(
-        token: String,
         photo: File,
         description: String,
         lat: Float? = null,
         lon: Float? = null
     ) {
         viewModelScope.launch {
-            storyRepository.addNewStory(token, photo, description, lat, lon).collect {
+            storyRepository.addNewStory(photo, description, lat, lon).collect {
                 _result.value = it
             }
         }

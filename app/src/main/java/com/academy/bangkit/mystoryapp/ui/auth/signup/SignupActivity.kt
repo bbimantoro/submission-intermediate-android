@@ -9,6 +9,7 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.lifecycle.Observer
 import com.academy.bangkit.mystoryapp.R
 import com.academy.bangkit.mystoryapp.data.Result
 import com.academy.bangkit.mystoryapp.data.network.response.CommonResponse
@@ -31,9 +32,7 @@ class SignupActivity : AppCompatActivity() {
         setupView()
         setupAction()
 
-        signupViewModel.result.observe(this) { result ->
-            observerSignup(result)
-        }
+        signupViewModel.signupResult.observe(this, observeSignup)
     }
 
     private fun setupView() {
@@ -80,8 +79,12 @@ class SignupActivity : AppCompatActivity() {
         }
     }
 
-    private fun observerSignup(result: Result<CommonResponse>) {
+    private val observeSignup = Observer<Result<CommonResponse>> { result ->
         when (result) {
+            is Result.Loading -> {
+                binding.progressbar.visibility = View.VISIBLE
+            }
+
             is Result.Success -> {
                 binding.progressbar.visibility = View.GONE
                 Toast.makeText(
@@ -93,10 +96,6 @@ class SignupActivity : AppCompatActivity() {
                 val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
                 finish()
-            }
-
-            is Result.Loading -> {
-                binding.progressbar.visibility = View.VISIBLE
             }
 
             is Result.Error -> {

@@ -7,17 +7,17 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.academy.bangkit.mystoryapp.R
-import com.academy.bangkit.mystoryapp.data.network.response.Story
+import com.academy.bangkit.mystoryapp.data.local.entity.StoryEntity
 import com.academy.bangkit.mystoryapp.databinding.ItemStoryBinding
 import com.academy.bangkit.mystoryapp.ui.story.detail.DetailStoryActivity
 import com.bumptech.glide.Glide
 
 class StoryAdapter :
-    ListAdapter<Story, StoryAdapter.MyViewHolder>(DIFF_CALLBACK) {
+    PagingDataAdapter<StoryEntity, StoryAdapter.MyViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MyViewHolder(
         ItemStoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -32,11 +32,11 @@ class StoryAdapter :
 
     inner class MyViewHolder(private var binding: ItemStoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: Story) {
+        fun bind(data: StoryEntity?) {
             binding.apply {
-                thumbnailIv.loadImage(data.photoUrl)
-                nameTv.text = data.name
-                descTv.text = data.description
+                thumbnailIv.loadImage(data?.photoUrl)
+                nameTv.text = data?.name
+                descTv.text = data?.description
 
             }
 
@@ -50,9 +50,9 @@ class StoryAdapter :
                     )
 
                 val intent = Intent(itemView.context, DetailStoryActivity::class.java).apply {
-                    putExtra(DetailStoryActivity.PHOTO_URL_EXTRA, data.photoUrl)
-                    putExtra(DetailStoryActivity.NAME_EXTRA, data.name)
-                    putExtra(DetailStoryActivity.DESC_EXTRA, data.description)
+                    putExtra(DetailStoryActivity.PHOTO_URL_EXTRA, data?.photoUrl)
+                    putExtra(DetailStoryActivity.NAME_EXTRA, data?.name)
+                    putExtra(DetailStoryActivity.DESC_EXTRA, data?.description)
                 }
 
                 itemView.context.startActivity(intent, optionsCompat.toBundle())
@@ -70,15 +70,13 @@ class StoryAdapter :
     }
 
     companion object {
-        val DIFF_CALLBACK: DiffUtil.ItemCallback<Story> =
-            object : DiffUtil.ItemCallback<Story>() {
-                override fun areItemsTheSame(oldItem: Story, newItem: Story): Boolean {
-                    return oldItem.id == newItem.id
-                }
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<StoryEntity>() {
+            override fun areItemsTheSame(oldItem: StoryEntity, newItem: StoryEntity): Boolean =
+                oldItem == newItem
 
-                override fun areContentsTheSame(oldItem: Story, newItem: Story): Boolean {
-                    return oldItem == newItem
-                }
-            }
+
+            override fun areContentsTheSame(oldItem: StoryEntity, newItem: StoryEntity): Boolean =
+                oldItem.id == newItem.id
+        }
     }
 }

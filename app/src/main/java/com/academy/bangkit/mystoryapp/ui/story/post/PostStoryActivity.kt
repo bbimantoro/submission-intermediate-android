@@ -39,7 +39,7 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 class PostStoryActivity : AppCompatActivity() {
 
     private val postStoryViewModel by viewModels<PostStoryViewModel> {
-        ViewModelFactory(UserPreferences.getInstance(dataStore))
+        ViewModelFactory.getInstance(this)
     }
 
     private lateinit var postStoryBinding: ActivityPostStoryBinding
@@ -94,23 +94,23 @@ class PostStoryActivity : AppCompatActivity() {
 
     }
 
-    override fun onResume() {
-        super.onResume()
-        isValidUserToken()
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        isValidUserToken()
+//    }
 
-    private fun isValidUserToken() {
-        postStoryViewModel.getToken().observe(this) { token ->
-            if (token.isEmpty()) {
-                val intent = Intent(this, LoginActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                }
-                startActivity(intent)
-            } else {
-                setupPostStory("Bearer $token")
-            }
-        }
-    }
+//    private fun isValidUserToken() {
+//        postStoryViewModel.getToken().observe(this) { token ->
+//            if (token.isEmpty()) {
+//                val intent = Intent(this, LoginActivity::class.java).apply {
+//                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//                }
+//                startActivity(intent)
+//            } else {
+//                setupPostStory("Bearer $token")
+//            }
+//        }
+//    }
 
     private fun setupPostStory(token: String) {
         postStoryBinding.uploadBtn.setOnClickListener {
@@ -121,7 +121,7 @@ class PostStoryActivity : AppCompatActivity() {
             } else {
                 if (getFile != null) {
                     val file = reduceFileImage(getFile as File)
-                    postStoryViewModel.addNewStory(token, file, description)
+                    // postStoryViewModel.addNewStory(token, file, description)
                 }
             }
         }

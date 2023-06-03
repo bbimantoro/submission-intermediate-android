@@ -10,6 +10,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.academy.bangkit.mystoryapp.R
 import com.academy.bangkit.mystoryapp.data.Result
 import com.academy.bangkit.mystoryapp.data.network.response.LoginResponse
@@ -36,8 +37,7 @@ class LoginActivity : AppCompatActivity() {
         setupView()
         setupAction()
 
-        loginViewModel.result.observe(this) { result -> observerLogin(result) }
-
+        loginViewModel.loginResult.observe(this, observerLogin)
     }
 
     private fun setupView() {
@@ -74,8 +74,12 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun observerLogin(result: Result<LoginResponse>) {
+    private val observerLogin = Observer<Result<LoginResponse>> { result ->
         when (result) {
+            is Result.Loading -> {
+                binding.progressbar.visibility = View.VISIBLE
+            }
+
             is Result.Success -> {
                 binding.progressbar.visibility = View.GONE
 
@@ -84,10 +88,6 @@ class LoginActivity : AppCompatActivity() {
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 finish()
-            }
-
-            is Result.Loading -> {
-                binding.progressbar.visibility = View.VISIBLE
             }
 
             is Result.Error -> {
