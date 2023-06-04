@@ -9,7 +9,7 @@ import com.academy.bangkit.mystoryapp.data.local.entity.StoryEntity
 
 @Database(
     entities = [StoryEntity::class, RemoteKeys::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class StoryDatabase : RoomDatabase() {

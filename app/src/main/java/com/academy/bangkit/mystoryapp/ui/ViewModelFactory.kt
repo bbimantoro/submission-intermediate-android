@@ -7,7 +7,9 @@ import com.academy.bangkit.mystoryapp.data.local.datastore.UserPreferences
 import com.academy.bangkit.mystoryapp.data.repository.StoryRepository
 import com.academy.bangkit.mystoryapp.di.Injection
 import com.academy.bangkit.mystoryapp.ui.auth.login.LoginViewModel
+import com.academy.bangkit.mystoryapp.ui.auth.signup.SignupViewModel
 import com.academy.bangkit.mystoryapp.ui.story.main.MainViewModel
+import com.academy.bangkit.mystoryapp.ui.story.maps.MapsViewModel
 import com.academy.bangkit.mystoryapp.ui.story.post.PostStoryViewModel
 import com.academy.bangkit.mystoryapp.ui.welcome.WelcomeViewModel
 
@@ -21,6 +23,10 @@ class ViewModelFactory(private val storyRepository: StoryRepository) :
                 MainViewModel(storyRepository) as T
             }
 
+            modelClass.isAssignableFrom(MapsViewModel::class.java) -> {
+                MapsViewModel(storyRepository) as T
+            }
+
             modelClass.isAssignableFrom(PostStoryViewModel::class.java) -> {
                 PostStoryViewModel(storyRepository) as T
             }
@@ -31,6 +37,10 @@ class ViewModelFactory(private val storyRepository: StoryRepository) :
 
             modelClass.isAssignableFrom(LoginViewModel::class.java) -> {
                 LoginViewModel(storyRepository) as T
+            }
+
+            modelClass.isAssignableFrom(SignupViewModel::class.java) -> {
+                SignupViewModel(storyRepository) as T
             }
 
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)

@@ -25,8 +25,8 @@
     <string name="err_permission">Permission not granted</string>
     <string name="err_take_picture">Something went wrong while capturing the picture</string>
     <string name="err_camera">Failed to display camera</string>
-    <string name="story_message">You\'ve reached the end of the story</string>
-    <string name="err_story_message">Stories not found.</string>
+    <string name="err_maps">Failed to load map</string>
+
 
     <string name="signup_success_message">Registration successful!</string>
     <string name="post_story_success_message">Story posted successfully!</string>

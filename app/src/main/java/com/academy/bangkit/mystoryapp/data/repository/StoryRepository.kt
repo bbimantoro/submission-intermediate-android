@@ -13,6 +13,7 @@ import com.academy.bangkit.mystoryapp.data.local.paging.StoryRemoteMediator
 import com.academy.bangkit.mystoryapp.data.network.response.CommonResponse
 import com.academy.bangkit.mystoryapp.data.network.response.LoginResponse
 import com.academy.bangkit.mystoryapp.data.network.response.Story
+import com.academy.bangkit.mystoryapp.utils.DataMapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -44,15 +45,17 @@ class StoryRepository(
         ).flow
     }
 
-    fun getStoriesWithLocation(token: String): Flow<Result<List<Story>>> = flow {
+    fun getStoriesWithLocation(): Flow<Result<List<StoryEntity>>> = flow {
         emit(Result.Loading)
         try {
-            val response = apiService.getAllStories(token, location = 1)
+            val token = userPreferences.getToken().first()
+            val response = apiService.getAllStories("Bearer $token", location = 1)
+            val result = DataMapper.mapStoryResponseToStoryEntity(response.listStory)
 
             if (response.error) {
                 emit(Result.Error(response.message))
             } else {
-                emit(Result.Success(response.listStory))
+                emit(Result.Success(result))
             }
         } catch (e: Exception) {
             emit(Result.Error(e.message.toString()))
@@ -135,11 +138,11 @@ class StoryRepository(
         }
     }.flowOn(Dispatchers.IO)
 
+    fun checkCredential(): Flow<Boolean> = userPreferences.checkCredential()
     suspend fun saveCredential(token: String) =
         userPreferences.saveCredential(token)
 
     suspend fun deleteCredential() = userPreferences.deleteCredential()
-    fun checkCredential(): Flow<Boolean> = userPreferences.checkCredential()
 
     companion object {
         @Volatile

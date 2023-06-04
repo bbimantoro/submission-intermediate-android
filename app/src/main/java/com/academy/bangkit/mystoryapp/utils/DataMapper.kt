@@ -17,17 +17,4 @@ object DataMapper {
                 lat = it.lat
             )
         }
-
-    fun mapStoryEntityToStoryResponse(input: List<StoryEntity>): List<Story> =
-        input.map {
-            Story(
-                id = it.id,
-                createdAt = it.createdAt,
-                photoUrl = it.photoUrl,
-                name = it.name,
-                description = it.description,
-                lon = it.lon,
-                lat = it.lat
-            )
-        }
 }

@@ -21,8 +21,6 @@ import com.academy.bangkit.mystoryapp.ui.auth.login.LoginActivity
 import com.academy.bangkit.mystoryapp.ui.auth.signup.SignupActivity
 import com.academy.bangkit.mystoryapp.ui.story.main.MainActivity
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "token")
-
 class WelcomeActivity : AppCompatActivity() {
 
     private val welcomeViewModel by viewModels<WelcomeViewModel> {
@@ -36,10 +34,6 @@ class WelcomeActivity : AppCompatActivity() {
         binding = ActivityWelcomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupView()
-        setupAction()
-        playAnimation()
-
         welcomeViewModel.checkCredential().observe(this) { isLogin ->
             if (isLogin) {
                 val intent = Intent(this, MainActivity::class.java).apply {
@@ -49,6 +43,10 @@ class WelcomeActivity : AppCompatActivity() {
                 finish()
             }
         }
+
+        setupView()
+        setupAction()
+        playAnimation()
     }
 
     private fun setupView() {
@@ -83,11 +81,11 @@ class WelcomeActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.signupBtn.setOnClickListener {
-            startActivity(Intent(this@WelcomeActivity, SignupActivity::class.java))
+            startActivity(Intent(this, SignupActivity::class.java))
         }
 
         binding.loginBtn.setOnClickListener {
-            startActivity(Intent(this@WelcomeActivity, LoginActivity::class.java))
+            startActivity(Intent(this, LoginActivity::class.java))
         }
     }
 }

@@ -23,7 +23,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCOLiNvSdJxbCgmOiNRWtfnnJ1EyijCAhU" />
+            android:value="AIzaSyAZ6-Y7RKzioQzaFFRnSNsG8uagQu9ZXwQ" />
 
         <activity
             android:name=".ui.story.post.PostStoryActivity"
