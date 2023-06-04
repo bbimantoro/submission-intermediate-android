@@ -36,18 +36,19 @@ class WelcomeActivity : AppCompatActivity() {
         binding = ActivityWelcomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        welcomeViewModel.isLogin().observe(this) { isLogin ->
+        setupView()
+        setupAction()
+        playAnimation()
+
+        welcomeViewModel.checkCredential().observe(this) { isLogin ->
             if (isLogin) {
-                val intent = Intent(this, MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                val intent = Intent(this, MainActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
                 startActivity(intent)
                 finish()
             }
         }
-
-        setupView()
-        setupAction()
-        playAnimation()
     }
 
     private fun setupView() {

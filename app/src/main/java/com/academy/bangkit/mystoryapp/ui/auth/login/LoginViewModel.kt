@@ -10,6 +10,7 @@ import com.academy.bangkit.mystoryapp.data.local.datastore.UserPreferences
 import com.academy.bangkit.mystoryapp.data.network.response.LoginResponse
 import com.academy.bangkit.mystoryapp.data.network.retrofit.ApiConfig
 import com.academy.bangkit.mystoryapp.data.repository.StoryRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
@@ -25,6 +26,11 @@ class LoginViewModel(private val storyRepository: StoryRepository) : ViewModel()
             storyRepository.login(email, password).collect {
                 _loginResult.value = it
             }
+        }
+    }
+    fun saveCredential(token: String) {
+        viewModelScope.launch {
+            storyRepository.saveCredential(token)
         }
     }
 }

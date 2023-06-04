@@ -3,7 +3,6 @@ package com.academy.bangkit.mystoryapp.ui.auth.login
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
@@ -24,15 +23,12 @@ class LoginActivity : AppCompatActivity() {
         ViewModelFactory.getInstance(this)
     }
 
-
     private lateinit var binding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        supportActionBar?.hide()
 
         setupView()
         setupAction()
@@ -80,20 +76,29 @@ class LoginActivity : AppCompatActivity() {
                 binding.progressbar.visibility = View.VISIBLE
             }
 
+            is Result.Error -> {
+                binding.progressbar.visibility = View.GONE
+                showToast(result.error)
+            }
+
             is Result.Success -> {
                 binding.progressbar.visibility = View.GONE
 
-                Log.d("LoginActivity", "token: ${result.data.loginResult?.token}")
+                val token = result.data.loginResult?.token
+                token?.let { loginViewModel.saveCredential(token) }
+                // Log.d("MainActivity", "token: $token")
 
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
-
-            is Result.Error -> {
-                binding.progressbar.visibility = View.GONE
-                Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
+                moveToMain()
             }
         }
+    }
+    private fun moveToMain() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun showToast(message: String?) {
+        Toast.makeText(this, message.toString(), Toast.LENGTH_SHORT).show()
     }
 }

@@ -33,7 +33,7 @@ class LoadingStateAdapter(private val retry: () -> Unit) :
         }
 
         fun bind(loadState: LoadState) {
-            with(binding) {
+            binding.apply {
                 if (loadState is LoadState.Error) {
                     errorMsgTv.text = loadState.error.localizedMessage
                 }

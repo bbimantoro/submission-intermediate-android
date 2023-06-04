@@ -2,7 +2,7 @@ package com.academy.bangkit.mystoryapp.data.network.response
 
 import com.google.gson.annotations.SerializedName
 
-// Response: addNewStory, register
+// Response: addNewStory and signup
 data class CommonResponse(
 
     @field:SerializedName("error")

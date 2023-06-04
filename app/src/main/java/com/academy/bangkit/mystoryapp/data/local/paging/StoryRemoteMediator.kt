@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.first
 class StoryRemoteMediator(
     private val database: StoryDatabase,
     private val apiService: StoryApiService,
-    private val userPreferences: UserPreferences,
+    private val userPreferences: UserPreferences
 ) : RemoteMediator<Int, StoryEntity>() {
 
     override suspend fun initialize(): InitializeAction {
@@ -59,26 +59,22 @@ class StoryRemoteMediator(
             val endOfPaginationReached = responseData.listStory.isEmpty()
             val result = DataMapper.mapStoryResponseToStoryEntity(responseData.listStory)
 
-            database.run {
-                withTransaction {
-                    if (loadType == LoadType.REFRESH) {
-                        remoteKeysDao().deleteRemoteKeys()
-                        storyDao().deleteAll()
-                    }
-
-                    val prevKey = if (page == 1) null else -1
-                    val nextKey = if (endOfPaginationReached) null else page + 1
-                    val keys = responseData.listStory.map {
-                        RemoteKeys(id = it.id, prevKey = prevKey, nextKey = nextKey)
-                    }
-
-                    remoteKeysDao().insertAll(keys)
-                    storyDao().insertStories(result)
+            database.withTransaction {
+                if (loadType == LoadType.REFRESH) {
+                    database.remoteKeysDao().deleteRemoteKeys()
+                    database.storyDao().deleteAll()
                 }
+
+                val prevKey = if (page == 1) null else -1
+                val nextKey = if (endOfPaginationReached) null else page + 1
+                val keys = responseData.listStory.map {
+                    RemoteKeys(id = it.id, prevKey = prevKey, nextKey = nextKey)
+                }
+
+                database.remoteKeysDao().insertAll(keys)
+                database.storyDao().insertStories(result)
             }
-
             MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
-
         } catch (e: Exception) {
             MediatorResult.Error(e)
         }

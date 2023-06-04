@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class SignupViewModel(private val storyRepository: StoryRepository) : ViewModel() {
+
     private val _signupResult = MutableLiveData<Result<CommonResponse>>()
     val signupResult: LiveData<Result<CommonResponse>> = _signupResult
 

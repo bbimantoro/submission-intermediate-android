@@ -16,6 +16,7 @@ import com.academy.bangkit.mystoryapp.data.network.response.CommonResponse
 import com.academy.bangkit.mystoryapp.databinding.ActivitySignupBinding
 import com.academy.bangkit.mystoryapp.ui.ViewModelFactory
 import com.academy.bangkit.mystoryapp.ui.auth.login.LoginActivity
+import com.academy.bangkit.mystoryapp.ui.story.main.MainActivity
 
 class SignupActivity : AppCompatActivity() {
 
@@ -85,23 +86,27 @@ class SignupActivity : AppCompatActivity() {
                 binding.progressbar.visibility = View.VISIBLE
             }
 
-            is Result.Success -> {
-                binding.progressbar.visibility = View.GONE
-                Toast.makeText(
-                    this,
-                    getString(R.string.signup_success_message),
-                    Toast.LENGTH_SHORT
-                ).show()
-
-                val intent = Intent(this, LoginActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
-
             is Result.Error -> {
                 binding.progressbar.visibility = View.GONE
-                Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
+                showToast(result.error)
+            }
+
+            is Result.Success -> {
+                binding.progressbar.visibility = View.GONE
+
+                showToast(getString(R.string.signup_success_message))
+                moveToLogin()
             }
         }
+    }
+
+    private fun moveToLogin() {
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun showToast(message: String?) {
+        Toast.makeText(this, message.toString(), Toast.LENGTH_SHORT).show()
     }
 }

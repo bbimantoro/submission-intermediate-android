@@ -15,7 +15,6 @@ import com.academy.bangkit.mystoryapp.data.repository.StoryRepository
 private const val USER_PREFERENCES = "user_preferences"
 
 object Injection {
-
     fun provideStoryRepository(context: Context): StoryRepository {
         return StoryRepository.getInstance(
             provideDatabase(context),
@@ -23,7 +22,6 @@ object Injection {
             provideUserPreferences(context)
         )
     }
-
     private fun provideDatabase(context: Context): StoryDatabase =
         StoryDatabase.getInstance(context)
 

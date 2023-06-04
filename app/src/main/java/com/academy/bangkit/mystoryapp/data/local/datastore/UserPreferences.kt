@@ -16,27 +16,23 @@ class UserPreferences private constructor(private val dataStore: DataStore<Prefe
         }
     }
 
-    suspend fun saveToken(token: String) {
+    suspend fun saveCredential(token: String) {
         dataStore.edit {
             it[TOKEN_KEY] = token
+            it[SESSION_KEY] = true
         }
     }
 
-    suspend fun destroyToken() {
+    suspend fun deleteCredential() {
         dataStore.edit {
-            it[TOKEN_KEY] = ""
+            it.remove(TOKEN_KEY)
+            it[SESSION_KEY] = false
         }
     }
 
-    suspend fun setLogin(session: Boolean) {
-        dataStore.edit {
-            it[SESSION_KEY] = session
-        }
-    }
-
-    fun getLogin(): Flow<Boolean> {
+    fun checkCredential(): Flow<Boolean> {
         return dataStore.data.map {
-            it[SESSION_KEY] ?: true
+            it[SESSION_KEY] ?: false
         }
     }
 

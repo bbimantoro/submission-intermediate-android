@@ -24,55 +24,18 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 
+private const val PAGE_SIZE_ITEM = 10
+
 class StoryRepository(
     private val storyDatabase: StoryDatabase,
     private val apiService: StoryApiService,
     private val userPreferences: UserPreferences
 ) {
-
-    fun signup(name: String, email: String, password: String): Flow<Result<CommonResponse>> =
-        flow {
-            emit(Result.Loading)
-            try {
-                val response = apiService.signup(name, email, password)
-
-                if (response.error) {
-                    emit(Result.Error(response.message))
-                } else {
-                    emit(Result.Success(response))
-                }
-
-            } catch (e: Exception) {
-                emit(Result.Error(e.message.toString()))
-            }
-        }.flowOn(Dispatchers.IO)
-
-    fun login(email: String, password: String): Flow<Result<LoginResponse>> = flow {
-        emit(Result.Loading)
-        try {
-            val response = apiService.login(email, password)
-            userPreferences.run {
-                saveToken(response.loginResult?.token.toString())
-                setLogin(true)
-            }
-
-            if (response.error) {
-                emit(Result.Error(response.message))
-            } else {
-                emit(Result.Success(response))
-            }
-
-        } catch (e: Exception) {
-            emit(Result.Error(e.message.toString()))
-        }
-    }.flowOn(Dispatchers.IO)
-
-
     fun getStories(): Flow<PagingData<StoryEntity>> {
         @OptIn(ExperimentalPagingApi::class)
         return Pager(
             config = PagingConfig(
-                pageSize = 5
+                pageSize = PAGE_SIZE_ITEM
             ),
             remoteMediator = StoryRemoteMediator(storyDatabase, apiService, userPreferences),
             pagingSourceFactory = {
@@ -81,11 +44,10 @@ class StoryRepository(
         ).flow
     }
 
-    fun getStoriesWithLocation(): Flow<Result<List<Story>>> = flow {
+    fun getStoriesWithLocation(token: String): Flow<Result<List<Story>>> = flow {
         emit(Result.Loading)
         try {
-            val token = userPreferences.getToken().first()
-            val response = apiService.getAllStories("Bearer $token", location = 1)
+            val response = apiService.getAllStories(token, location = 1)
 
             if (response.error) {
                 emit(Result.Error(response.message))
@@ -140,14 +102,44 @@ class StoryRepository(
         }
     }.flowOn(Dispatchers.IO)
 
-    fun getLogin(): Flow<Boolean> = userPreferences.getLogin()
+    fun signup(name: String, email: String, password: String): Flow<Result<CommonResponse>> =
+        flow {
+            emit(Result.Loading)
+            try {
+                val response = apiService.signup(name, email, password)
 
-    suspend fun deleteCredential() {
-        userPreferences.run {
-            destroyToken()
-            setLogin(false)
+                if (response.error) {
+                    emit(Result.Error(response.message))
+                } else {
+                    emit(Result.Success(response))
+                }
+
+            } catch (e: Exception) {
+                emit(Result.Error(e.message.toString()))
+            }
+        }.flowOn(Dispatchers.IO)
+
+    fun login(email: String, password: String): Flow<Result<LoginResponse>> = flow {
+        emit(Result.Loading)
+        try {
+            val response = apiService.login(email, password)
+
+            if (response.error) {
+                emit(Result.Error(response.message))
+            } else {
+                emit(Result.Success(response))
+            }
+
+        } catch (e: Exception) {
+            emit(Result.Error(e.message.toString()))
         }
-    }
+    }.flowOn(Dispatchers.IO)
+
+    suspend fun saveCredential(token: String) =
+        userPreferences.saveCredential(token)
+
+    suspend fun deleteCredential() = userPreferences.deleteCredential()
+    fun checkCredential(): Flow<Boolean> = userPreferences.checkCredential()
 
     companion object {
         @Volatile

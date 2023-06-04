@@ -12,6 +12,7 @@ import com.academy.bangkit.mystoryapp.R
 import com.academy.bangkit.mystoryapp.databinding.ActivityMainBinding
 import com.academy.bangkit.mystoryapp.ui.ViewModelFactory
 import com.academy.bangkit.mystoryapp.ui.adapter.SectionsPagerAdapter
+import com.academy.bangkit.mystoryapp.ui.auth.login.LoginActivity
 import com.google.android.material.tabs.TabLayoutMediator
 
 class MainActivity : AppCompatActivity() {
@@ -27,18 +28,7 @@ class MainActivity : AppCompatActivity() {
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mainBinding.root)
 
-
         setupPagerAdapter()
-    }
-
-    private fun setupPagerAdapter() {
-        val sectionsPagerAdapter = SectionsPagerAdapter(this)
-        mainBinding.viewPager.adapter = sectionsPagerAdapter
-        TabLayoutMediator(mainBinding.tabs, mainBinding.viewPager) { tab, position ->
-            tab.text = resources.getString(TAB_TITLES[position])
-        }.attach()
-
-        supportActionBar?.elevation = 0f
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -55,11 +45,30 @@ class MainActivity : AppCompatActivity() {
 
             R.id.logout -> {
                 mainViewModel.logout()
+                moveToLogin()
                 true
             }
 
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun setupPagerAdapter() {
+        val sectionsPagerAdapter = SectionsPagerAdapter(this)
+        mainBinding.viewPager.adapter = sectionsPagerAdapter
+        TabLayoutMediator(mainBinding.tabs, mainBinding.viewPager) { tab, position ->
+            tab.text = resources.getString(TAB_TITLES[position])
+        }.attach()
+
+        supportActionBar?.elevation = 0f
+    }
+
+    private fun moveToLogin() {
+        val intent = Intent(this, LoginActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        startActivity(intent)
+        finish()
     }
 
     companion object {

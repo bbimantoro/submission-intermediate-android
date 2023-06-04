@@ -23,6 +23,7 @@
     <string name="err_take_picture">Terjadi kesalahan saat mengambil gambar</string>
     <string name="err_camera">Gagal menampilkan kamera</string>
     <string name="story_message">Anda telah mencapai akhir cerita</string>
+    <string name="err_story_message">Cerita tidak ditemukan.</string>
 
     <string name="signup_success_message">Registrasi berhasil!</string>
     <string name="post_story_success_message">Cerita berhasil diposting!</string>

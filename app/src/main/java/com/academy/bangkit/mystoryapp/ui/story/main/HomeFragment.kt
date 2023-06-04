@@ -21,7 +21,7 @@ import com.google.android.material.snackbar.Snackbar
 
 class HomeFragment : Fragment() {
 
-    private val viewModel by activityViewModels<MainViewModel> {
+    private val homeViewModel by activityViewModels<MainViewModel> {
         ViewModelFactory.getInstance(requireActivity())
     }
 
@@ -42,50 +42,30 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupRecyclerView()
+        getData()
 
-        viewModel.storyResult.observe(viewLifecycleOwner, observerMainStory)
     }
 
-    private fun setupRecyclerView() {
+    private fun getData() {
         adapter = StoryAdapter()
 
-        homeBinding.apply {
-            swipeRefresh.setOnRefreshListener {
-                refresh()
-            }
 
-            storyRv.apply {
-                setHasFixedSize(true)
-                layoutManager = LinearLayoutManager(requireActivity())
-                adapter = this@HomeFragment.adapter.withLoadStateFooter(
-                    footer = LoadingStateAdapter {
-                        retry()
-                    }
-                )
-            }
+        homeBinding.storyRv.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(requireActivity())
+            adapter = this@HomeFragment.adapter.withLoadStateFooter(
+                footer = LoadingStateAdapter {
+                    retry()
+                }
+            )
         }
 
-        adapter.addLoadStateListener {
-            if (it.source.refresh is LoadState.NotLoading && it.append.endOfPaginationReached && adapter.itemCount < 1) {
-                Snackbar.make(
-                    requireActivity().window.decorView,
-                    getString(R.string.story_message),
-                    Snackbar.LENGTH_SHORT
-                ).show()
-            }
-        }
-    }
-
-    private val observerMainStory = Observer<PagingData<StoryEntity>> {
-        adapter.submitData(lifecycle, it)
-        homeBinding.apply {
-            swipeRefresh.isRefreshing = false
+        homeViewModel.storyResult.observe(viewLifecycleOwner) {
+            adapter.submitData(lifecycle, it)
         }
     }
 
     private fun retry() = adapter.retry()
-    private fun refresh() = adapter.refresh()
 
     override fun onDestroyView() {
         super.onDestroyView()
