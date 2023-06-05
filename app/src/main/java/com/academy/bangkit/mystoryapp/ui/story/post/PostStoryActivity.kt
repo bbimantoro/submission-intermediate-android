@@ -1,26 +1,25 @@
 package com.academy.bangkit.mystoryapp.ui.story.post
 
-import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.content.Intent.ACTION_GET_CONTENT
-import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
+import android.location.Location
 import android.net.Uri
 import android.os.Build
+import android.Manifest
+import android.content.IntentSender
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.Observer
 import com.academy.bangkit.mystoryapp.R
-import com.academy.bangkit.mystoryapp.data.local.datastore.UserPreferences
 import com.academy.bangkit.mystoryapp.data.network.response.CommonResponse
 import com.academy.bangkit.mystoryapp.databinding.ActivityPostStoryBinding
 import com.academy.bangkit.mystoryapp.utils.reduceFileImage
@@ -28,142 +27,115 @@ import com.academy.bangkit.mystoryapp.ui.ViewModelFactory
 import com.academy.bangkit.mystoryapp.ui.camera.CameraActivity
 import com.academy.bangkit.mystoryapp.utils.uriToFile
 import com.academy.bangkit.mystoryapp.data.Result
-import com.academy.bangkit.mystoryapp.ui.auth.login.LoginActivity
 import com.academy.bangkit.mystoryapp.ui.story.main.MainActivity
 import com.academy.bangkit.mystoryapp.utils.rotateBitmap
 import com.bumptech.glide.Glide
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationSettingsRequest
 import java.io.File
-
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "token")
+import java.util.concurrent.TimeUnit
 
 class PostStoryActivity : AppCompatActivity() {
 
-    private val postStoryViewModel by viewModels<PostStoryViewModel> {
+    private val viewModel by viewModels<PostStoryViewModel> {
         ViewModelFactory.getInstance(this)
     }
 
-    private lateinit var postStoryBinding: ActivityPostStoryBinding
+    private lateinit var binding: ActivityPostStoryBinding
+    private lateinit var locationRequest: LocationRequest
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     private var getFile: File? = null
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_CODE_PERMISSIONS) {
-            if (!allPermissionGranted()) {
-                Toast.makeText(this, getString(R.string.err_permission), Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    private fun allPermissionGranted() = REQUIRED_PERMISSIONS.all {
-        ContextCompat.checkSelfPermission(baseContext, it) == PackageManager.PERMISSION_GRANTED
-    }
+    private var location: Location? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        postStoryBinding = ActivityPostStoryBinding.inflate(layoutInflater)
-        setContentView(postStoryBinding.root)
+        binding = ActivityPostStoryBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         supportActionBar?.title = getString(R.string.label_post)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        if (!allPermissionGranted()) {
-            ActivityCompat.requestPermissions(
-                this,
-                REQUIRED_PERMISSIONS,
-                REQUEST_CODE_PERMISSIONS
-            )
-        }
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        postStoryBinding.apply {
+        binding.apply {
             cameraBtn.setOnClickListener {
-                startCamera()
+                val intent = Intent(this@PostStoryActivity, CameraActivity::class.java)
+                launcherIntentCamera.launch(intent)
             }
 
             galleryBtn.setOnClickListener {
-                startGallery()
+                val intent = Intent().apply {
+                    action = ACTION_GET_CONTENT
+                    type = "image/*"
+                }
+                val chooser = Intent.createChooser(intent, "Choose a picture")
+                launcherIntentGallery.launch(chooser)
             }
         }
 
-        postStoryViewModel.result.observe(this) { result ->
-            observerPostStory(result)
-        }
-
+        setupPostAction()
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//        isValidUserToken()
-//    }
+    private fun setupPostAction() {
+        binding.uploadBtn.setOnClickListener {
+            val description = binding.descriptionEdt.text.toString().trim()
 
-//    private fun isValidUserToken() {
-//        postStoryViewModel.getToken().observe(this) { token ->
-//            if (token.isEmpty()) {
-//                val intent = Intent(this, LoginActivity::class.java).apply {
-//                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//                }
-//                startActivity(intent)
-//            } else {
-//                setupPostStory("Bearer $token")
-//            }
-//        }
-//    }
+            when {
+                description.isEmpty() -> {
+                    showToast(getString(R.string.err_description_field))
+                }
 
-    private fun setupPostStory(token: String) {
-        postStoryBinding.uploadBtn.setOnClickListener {
-            val description = postStoryBinding.descriptionEdt.text.toString()
-
-            if (description.isEmpty()) {
-                postStoryBinding.descriptionEdt.error = getString(R.string.err_description_field)
-            } else {
-                if (getFile != null) {
-                    val file = reduceFileImage(getFile as File)
-                    // postStoryViewModel.addNewStory(token, file, description)
+                else -> {
+                    getFile?.let { file ->
+                        val compressFile = reduceFileImage(file)
+                        viewModel.addNewStory(
+                            compressFile,
+                            description,
+                            location?.latitude?.toFloat(),
+                            location?.longitude?.toFloat()
+                        )
+                    } ?: run {
+                        showToast(getString(R.string.err_image_field))
+                    }
                 }
             }
         }
+
+        binding.switchGps.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                getMyLastLocation()
+                createLocationRequest()
+            } else {
+                location = null
+            }
+        }
+
+        viewModel.result.observe(this, observerPostStory)
     }
 
-    private fun observerPostStory(result: Result<CommonResponse>) {
+    private val observerPostStory = Observer<Result<CommonResponse>> { result ->
         when (result) {
-            is Result.Success -> {
-                postStoryBinding.progressbar.visibility = View.GONE
-                Toast.makeText(
-                    this,
-                    getString(R.string.post_story_success_message),
-                    Toast.LENGTH_SHORT
-                ).show()
-
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
-
             is Result.Loading -> {
-                postStoryBinding.progressbar.visibility = View.VISIBLE
+                binding.progressbar.visibility = View.VISIBLE
             }
 
             is Result.Error -> {
-                postStoryBinding.progressbar.visibility = View.GONE
-                Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
+                binding.progressbar.visibility = View.GONE
+                showToast(result.error)
+            }
+
+            is Result.Success -> {
+                binding.progressbar.visibility = View.GONE
+
+                showToast(result.data.message)
+
+                moveToMain()
             }
         }
-    }
-
-    private fun startCamera() {
-        val intent = Intent(this, CameraActivity::class.java)
-        launcherIntentCamera.launch(intent)
-    }
-
-    private fun startGallery() {
-        val intent = Intent()
-        intent.action = ACTION_GET_CONTENT
-        intent.type = "image/*"
-        val chooser = Intent.createChooser(intent, "Choose a picture")
-        launcherIntentGallery.launch(chooser)
     }
 
     private val launcherIntentCamera = registerForActivityResult(
@@ -180,13 +152,13 @@ class PostStoryActivity : AppCompatActivity() {
 
             getFile = myFile
 
-            val result = rotateBitmap(
+            val rotateFile = rotateBitmap(
                 BitmapFactory.decodeFile(getFile?.path), isBackCamera
             )
 
-            postStoryBinding.previewIv.let {
+            binding.previewIv.let {
                 Glide.with(this)
-                    .load(result)
+                    .load(rotateFile)
                     .into(it)
             }
         }
@@ -200,12 +172,107 @@ class PostStoryActivity : AppCompatActivity() {
             val myFile = uriToFile(selectedImg, this)
             getFile = myFile
 
-            postStoryBinding.previewIv.let {
+            binding.previewIv.let {
                 Glide.with(this)
                     .load(myFile)
                     .into(it)
             }
         }
+    }
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permission ->
+        when {
+            permission[Manifest.permission.CAMERA] ?: false -> {
+
+            }
+
+            permission[Manifest.permission.ACCESS_FINE_LOCATION] ?: false -> {
+                getMyLastLocation()
+            }
+
+            permission[Manifest.permission.ACCESS_COARSE_LOCATION] ?: false -> {
+                getMyLastLocation()
+            }
+        }
+    }
+
+    private fun checkPermission(permission: String): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            permission,
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun getMyLastLocation() {
+        if (checkPermission(Manifest.permission.ACCESS_FINE_LOCATION) &&
+            checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+        ) {
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                this.location = location
+                if (location == null) showToast(getString(R.string.err_location))
+            }
+        } else {
+            requestPermissionLauncher.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+            )
+        }
+    }
+
+    private val resolutionLauncher = registerForActivityResult(
+        ActivityResultContracts.StartIntentSenderForResult()
+    ) { result ->
+        when (result.resultCode) {
+            RESULT_OK -> {
+                Log.i(TAG, "onActivityResult: All location settings are satisfied")
+            }
+
+            RESULT_CANCELED -> {
+                showToast(getString(R.string.err_gps))
+            }
+        }
+    }
+
+    private fun createLocationRequest() {
+        locationRequest = LocationRequest.create().apply {
+            interval = TimeUnit.SECONDS.toMillis(1)
+            maxWaitTime = TimeUnit.SECONDS.toMillis(1)
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        }
+
+        val builder = LocationSettingsRequest.Builder()
+            .addLocationRequest(locationRequest)
+
+        val client = LocationServices.getSettingsClient(this)
+        client.checkLocationSettings(builder.build())
+            .addOnSuccessListener {
+                getMyLastLocation()
+            }
+            .addOnFailureListener { exception ->
+                if (exception is ResolvableApiException) {
+                    try {
+                        resolutionLauncher.launch(
+                            IntentSenderRequest.Builder(exception.resolution).build()
+                        )
+                    } catch (sendEx: IntentSender.SendIntentException) {
+                        showToast(sendEx.message.toString())
+                    }
+                }
+            }
+    }
+
+    private fun moveToMain() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this@PostStoryActivity, message, Toast.LENGTH_SHORT).show()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -214,10 +281,9 @@ class PostStoryActivity : AppCompatActivity() {
     }
 
     companion object {
+        const val TAG = "PostStoryActivity"
         const val CAMERA_RESULT = 200
         const val PICTURE_EXTRA = "picture_extra"
         const val IS_BACK_CAMERA_EXTRA = "is_back_camera_extra"
-        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
-        private const val REQUEST_CODE_PERMISSIONS = 10
     }
 }

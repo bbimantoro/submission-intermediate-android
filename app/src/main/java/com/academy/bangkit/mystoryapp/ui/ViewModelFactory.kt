@@ -3,7 +3,6 @@ package com.academy.bangkit.mystoryapp.ui
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.academy.bangkit.mystoryapp.data.local.datastore.UserPreferences
 import com.academy.bangkit.mystoryapp.data.repository.StoryRepository
 import com.academy.bangkit.mystoryapp.di.Injection
 import com.academy.bangkit.mystoryapp.ui.auth.login.LoginViewModel

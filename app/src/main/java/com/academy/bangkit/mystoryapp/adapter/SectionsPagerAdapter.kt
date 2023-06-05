@@ -1,4 +1,4 @@
-package com.academy.bangkit.mystoryapp.ui.adapter
+package com.academy.bangkit.mystoryapp.adapter
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment

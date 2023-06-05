@@ -6,7 +6,6 @@
     <dimen name="thumbnail_height_size">194dp</dimen>
     <dimen name="description_height_size">240dp</dimen>
 
-
     <dimen name="margin_s">8dp</dimen>
     <dimen name="margin_m">16dp</dimen>
     <dimen name="margin_l">32dp</dimen>
@@ -16,5 +15,4 @@
 
     <dimen name="capture_size">60dp</dimen>
     <dimen name="switch_camera_size">60dp</dimen>
-
 </resources>

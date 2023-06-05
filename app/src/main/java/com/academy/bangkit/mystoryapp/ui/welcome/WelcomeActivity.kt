@@ -2,7 +2,6 @@ package com.academy.bangkit.mystoryapp.ui.welcome
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -11,10 +10,6 @@ import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.activity.viewModels
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
-import com.academy.bangkit.mystoryapp.data.local.datastore.UserPreferences
 import com.academy.bangkit.mystoryapp.databinding.ActivityWelcomeBinding
 import com.academy.bangkit.mystoryapp.ui.ViewModelFactory
 import com.academy.bangkit.mystoryapp.ui.auth.login.LoginActivity
@@ -23,7 +18,7 @@ import com.academy.bangkit.mystoryapp.ui.story.main.MainActivity
 
 class WelcomeActivity : AppCompatActivity() {
 
-    private val welcomeViewModel by viewModels<WelcomeViewModel> {
+    private val viewModel by viewModels<WelcomeViewModel> {
         ViewModelFactory.getInstance(this)
     }
 
@@ -34,7 +29,11 @@ class WelcomeActivity : AppCompatActivity() {
         binding = ActivityWelcomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        welcomeViewModel.checkCredential().observe(this) { isLogin ->
+        setupView()
+        setupAction()
+        playAnimation()
+
+        viewModel.checkCredential().observe(this) { isLogin ->
             if (isLogin) {
                 val intent = Intent(this, MainActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -43,10 +42,6 @@ class WelcomeActivity : AppCompatActivity() {
                 finish()
             }
         }
-
-        setupView()
-        setupAction()
-        playAnimation()
     }
 
     private fun setupView() {
@@ -60,6 +55,16 @@ class WelcomeActivity : AppCompatActivity() {
             )
         }
         supportActionBar?.hide()
+    }
+
+    private fun setupAction() {
+        binding.signupBtn.setOnClickListener {
+            startActivity(Intent(this, SignupActivity::class.java))
+        }
+
+        binding.loginBtn.setOnClickListener {
+            startActivity(Intent(this, LoginActivity::class.java))
+        }
     }
 
     private fun playAnimation() {
@@ -76,16 +81,6 @@ class WelcomeActivity : AppCompatActivity() {
         AnimatorSet().apply {
             playSequentially(welcomeIv, title, desc, together)
             start()
-        }
-    }
-
-    private fun setupAction() {
-        binding.signupBtn.setOnClickListener {
-            startActivity(Intent(this, SignupActivity::class.java))
-        }
-
-        binding.loginBtn.setOnClickListener {
-            startActivity(Intent(this, LoginActivity::class.java))
         }
     }
 }

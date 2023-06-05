@@ -16,12 +16,11 @@ import com.academy.bangkit.mystoryapp.data.network.response.CommonResponse
 import com.academy.bangkit.mystoryapp.databinding.ActivitySignupBinding
 import com.academy.bangkit.mystoryapp.ui.ViewModelFactory
 import com.academy.bangkit.mystoryapp.ui.auth.login.LoginActivity
-import com.academy.bangkit.mystoryapp.ui.story.main.MainActivity
 
 class SignupActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignupBinding
-    private val signupViewModel by viewModels<SignupViewModel> {
+    private val viewModel by viewModels<SignupViewModel> {
         ViewModelFactory.getInstance(this)
     }
 
@@ -32,8 +31,6 @@ class SignupActivity : AppCompatActivity() {
 
         setupView()
         setupAction()
-
-        signupViewModel.signupResult.observe(this, observeSignup)
     }
 
     private fun setupView() {
@@ -70,13 +67,15 @@ class SignupActivity : AppCompatActivity() {
                 }
 
                 else -> {
-                    signupViewModel.signup(
+                    viewModel.signup(
                         name,
                         email,
                         password
                     )
                 }
             }
+
+            viewModel.signupResult.observe(this, observeSignup)
         }
     }
 

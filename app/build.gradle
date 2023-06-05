@@ -48,6 +48,11 @@ dependencies {
     def retrofit_version = "2.9.0"
     def camerax_version = "1.2.3"
     def room_version = "2.5.1"
+    def datastore_version = "1.0.0"
+    def coroutines_version = "1.6.4"
+    def logging_interceptor_version = "4.10.0"
+    def paging_version = "3.1.1"
+    def mockito_version = "5.1.1"
 
     // ui
     implementation 'androidx.core:core-ktx:1.10.1'
@@ -70,28 +75,37 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
 
     // datastore
-    implementation "androidx.datastore:datastore-preferences:1.0.0"
+    implementation "androidx.datastore:datastore-preferences:$datastore_version"
 
     // coroutines support
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
     // networking
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
-    implementation "com.squareup.okhttp3:logging-interceptor:4.10.0"
+    implementation "com.squareup.okhttp3:logging-interceptor:$logging_interceptor_version"
 
     // room
     implementation "androidx.room:room-ktx:$room_version"
     ksp "androidx.room:room-compiler:$room_version"
 
     // paging
-    implementation "androidx.paging:paging-runtime-ktx:3.1.1"
+    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
     implementation "androidx.room:room-paging:$room_version"
 
     // maps support
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
 
+    // mockito
+    testImplementation "org.mockito:mockito-core:$mockito_version"
+    testImplementation "org.mockito:mockito-inline:$mockito_version"
+
+    // special testing
+    testImplementation "androidx.arch.core:core-testing:2.2.0" // InstantTaskExecutorRule
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+    //TestDispatcher
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'

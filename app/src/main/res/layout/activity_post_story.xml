@@ -8,11 +8,11 @@
 
     <ImageView
         android:id="@+id/previewIv"
-        android:layout_width="@dimen/default_size"
-        android:layout_height="@dimen/default_size"
-        android:layout_marginStart="@dimen/margin_m"
-        android:layout_marginTop="@dimen/margin_m"
-        android:layout_marginEnd="@dimen/margin_m"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:contentDescription="@string/content_desc_image"
         android:padding="@dimen/padding_m"
         android:scaleType="centerCrop"
@@ -24,54 +24,70 @@
 
     <Button
         android:id="@+id/cameraBtn"
-        android:layout_width="@dimen/default_size"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_l"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="@dimen/margin_m"
-        android:layout_marginEnd="@dimen/margin_m"
+        android:layout_marginEnd="24dp"
+        android:padding="16dp"
         android:text="@string/camera"
-        app:layout_constraintEnd_toStartOf="@+id/galleryBtn"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/horizontalGuideline"
-        app:shapeAppearance="@style/roundCorner" />
-
-    <Button
-        android:id="@+id/galleryBtn"
-        android:layout_width="@dimen/default_size"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_m"
-        android:layout_marginTop="@dimen/margin_m"
-        android:layout_marginEnd="@dimen/margin_l"
-        android:text="@string/gallery"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/cameraBtn"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/horizontalGuideline"
         app:shapeAppearance="@style/roundCorner" />
 
     <EditText
         android:id="@+id/descriptionEdt"
         android:layout_width="@dimen/default_size"
-        android:layout_height="@dimen/description_height_size"
-        android:layout_marginStart="@dimen/margin_l"
-        android:layout_marginEnd="@dimen/margin_l"
+        android:layout_height="0dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="16dp"
         android:autofillHints="Description"
         android:background="@drawable/bg_edt_description"
         android:gravity="start|top"
         android:hint="@string/enter_desc"
         android:inputType="textMultiLine"
         android:padding="@dimen/padding_m"
-        app:layout_constraintBottom_toTopOf="@+id/uploadBtn"
+        app:layout_constraintBottom_toTopOf="@+id/switchGps"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/horizontalGuideline2" />
+        app:layout_constraintTop_toBottomOf="@+id/galleryBtn" />
+
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/switchGps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/set_switch_location"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/uploadBtn"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/galleryBtn"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:padding="16dp"
+        android:text="@string/gallery"
+        app:layout_constraintEnd_toEndOf="@+id/cameraBtn"
+        app:layout_constraintStart_toStartOf="@+id/cameraBtn"
+        app:layout_constraintTop_toBottomOf="@+id/cameraBtn"
+        app:shapeAppearance="@style/roundCorner" />
 
     <Button
         android:id="@+id/uploadBtn"
         android:layout_width="@dimen/default_size"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_l"
-        android:layout_marginEnd="@dimen/margin_l"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
         android:layout_marginBottom="@dimen/margin_m"
+        android:padding="16dp"
         android:text="@string/upload"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -95,7 +111,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.4" />
+        app:layout_constraintGuide_percent="0.40" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/verticalGuideline"

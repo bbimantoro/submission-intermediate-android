@@ -5,18 +5,17 @@ import androidx.appcompat.app.AppCompatActivity
 import com.academy.bangkit.mystoryapp.R
 import com.academy.bangkit.mystoryapp.databinding.ActivityDetailStoryBinding
 import com.bumptech.glide.Glide
-import java.io.File
 
 class DetailStoryActivity : AppCompatActivity() {
 
-    private lateinit var detailBinding: ActivityDetailStoryBinding
+    private lateinit var binding: ActivityDetailStoryBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        detailBinding = ActivityDetailStoryBinding.inflate(layoutInflater)
-        setContentView(detailBinding.root)
+        binding = ActivityDetailStoryBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        supportActionBar?.title = getString(R.string.label_detail)
+        supportActionBar?.title = intent.getStringExtra(NAME_EXTRA)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         setupData()
@@ -28,9 +27,9 @@ class DetailStoryActivity : AppCompatActivity() {
         val description = intent.getStringExtra(DESC_EXTRA)
 
 
-        Glide.with(this).load(photoUrl).into(detailBinding.thumbnailIv)
+        Glide.with(this).load(photoUrl).into(binding.thumbnailIv)
 
-        detailBinding.apply {
+        binding.apply {
             nameTv.text = name
             descTv.text = description
         }

@@ -19,7 +19,7 @@ import com.academy.bangkit.mystoryapp.ui.story.main.MainActivity
 
 class LoginActivity : AppCompatActivity() {
 
-    private val loginViewModel by viewModels<LoginViewModel> {
+    private val viewModel by viewModels<LoginViewModel> {
         ViewModelFactory.getInstance(this)
     }
 
@@ -32,8 +32,6 @@ class LoginActivity : AppCompatActivity() {
 
         setupView()
         setupAction()
-
-        loginViewModel.loginResult.observe(this, observerLogin)
     }
 
     private fun setupView() {
@@ -64,9 +62,11 @@ class LoginActivity : AppCompatActivity() {
                 }
 
                 else -> {
-                    loginViewModel.login(email, password)
+                    viewModel.login(email, password)
                 }
             }
+
+            viewModel.loginResult.observe(this, observerLogin)
         }
     }
 
@@ -85,13 +85,14 @@ class LoginActivity : AppCompatActivity() {
                 binding.progressbar.visibility = View.GONE
 
                 val token = result.data.loginResult?.token
-                token?.let { loginViewModel.saveCredential(token) }
+                token?.let { viewModel.saveCredential(token) }
                 // Log.d("MainActivity", "token: $token")
 
                 moveToMain()
             }
         }
     }
+
     private fun moveToMain() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)

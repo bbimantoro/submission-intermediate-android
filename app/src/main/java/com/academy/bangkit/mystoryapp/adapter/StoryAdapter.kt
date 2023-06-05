@@ -1,4 +1,4 @@
-package com.academy.bangkit.mystoryapp.ui.adapter
+package com.academy.bangkit.mystoryapp.adapter
 
 import android.app.Activity
 import android.content.Intent

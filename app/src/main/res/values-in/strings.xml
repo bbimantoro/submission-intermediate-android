@@ -23,6 +23,10 @@
     <string name="err_take_picture">Terjadi kesalahan saat mengambil gambar</string>
     <string name="err_camera">Gagal menampilkan kamera</string>
     <string name="err_maps">Gagal memuat peta</string>
+    <string name="err_location">Location is not found. Try Again</string>
+    <string name="err_gps">Anda harus mengaktifkan GPS untuk menggunakan aplikasi ini!</string>
+
+    <string name="set_switch_location">Atur lokasi</string>
 
     <string name="signup_success_message">Registrasi berhasil!</string>
     <string name="post_story_success_message">Cerita berhasil diposting!</string>

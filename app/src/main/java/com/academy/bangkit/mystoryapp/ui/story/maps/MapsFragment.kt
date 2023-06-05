@@ -1,6 +1,5 @@
 package com.academy.bangkit.mystoryapp.ui.story.maps
 
-import android.content.pm.PackageManager
 import android.content.res.Resources
 import androidx.fragment.app.Fragment
 import android.os.Bundle
@@ -9,8 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import com.academy.bangkit.mystoryapp.R
 import com.academy.bangkit.mystoryapp.data.Result
@@ -25,20 +22,22 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 
-class MapsFragment : Fragment(), OnMapReadyCallback {
+class MapsFragment : Fragment() {
 
-    private val mapsViewModel by viewModels<MapsViewModel> {
+    private val viewModel by viewModels<MapsViewModel> {
         ViewModelFactory.getInstance(requireActivity())
     }
 
-    private var _mapsBinding: FragmentMapsBinding? = null
-    private val mapsBinding get() = _mapsBinding!!
+    private var _binding: FragmentMapsBinding? = null
+    private val binding get() = _binding!!
 
-    private lateinit var map: GoogleMap
 
     private val callback = OnMapReadyCallback { googleMap ->
 
+        googleMap.uiSettings.isCompassEnabled = true
 
+        setMapStyle(googleMap)
+        fetchStories(googleMap)
     }
 
     override fun onCreateView(
@@ -46,29 +45,20 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _mapsBinding = FragmentMapsBinding.inflate(layoutInflater, container, false)
-        return mapsBinding.root
+        _binding = FragmentMapsBinding.inflate(layoutInflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-        mapFragment?.getMapAsync(this)
+        mapFragment?.getMapAsync(callback)
     }
 
-    override fun onMapReady(googleMap: GoogleMap) {
-        map = googleMap
-
-        map.uiSettings.isCompassEnabled = true
-
-        setMapStyle()
-        fetchStories()
-    }
-
-    private fun setMapStyle() {
+    private fun setMapStyle(googleMap: GoogleMap) {
         try {
             val success =
-                map.setMapStyle(
+                googleMap.setMapStyle(
                     MapStyleOptions.loadRawResourceStyle(
                         requireActivity(),
                         R.raw.map_style
@@ -84,8 +74,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun fetchStories() {
-        mapsViewModel.storyMapsResult.observe(viewLifecycleOwner) { result ->
+    private fun fetchStories(googleMap: GoogleMap) {
+        viewModel.getStoriesWithLocation()
+        viewModel.storyMapsResult.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Result.Loading -> {}
                 is Result.Error -> {
@@ -93,13 +84,13 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 }
 
                 is Result.Success -> {
-                    setupMarker(result.data)
+                    setupMarker(googleMap, result.data)
                 }
             }
         }
     }
 
-    private fun setupMarker(stories: List<StoryEntity>) {
+    private fun setupMarker(googleMap: GoogleMap, stories: List<StoryEntity>) {
 
         val firstStories = stories.firstOrNull() ?: return
         val cameraUpdate =
@@ -110,7 +101,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 ), 15f
             )
 
-        map.animateCamera(cameraUpdate)
+        googleMap.animateCamera(cameraUpdate)
 
         stories.forEach {
             val marker = MarkerOptions()
@@ -118,7 +109,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 .title(it.name)
                 .snippet(it.description)
 
-            val markerTag = map.addMarker(marker)
+            val markerTag = googleMap.addMarker(marker)
             markerTag?.tag = stories
         }
     }
@@ -148,7 +139,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _mapsBinding = null
+        _binding = null
     }
 
     companion object {

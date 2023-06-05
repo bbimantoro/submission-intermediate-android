@@ -110,12 +110,13 @@ class CameraActivity : AppCompatActivity() {
                 }
 
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                    val intent = Intent()
-                    intent.putExtra(PostStoryActivity.PICTURE_EXTRA, photoFile)
-                    intent.putExtra(
-                        PostStoryActivity.IS_BACK_CAMERA_EXTRA,
-                        cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA
-                    )
+                    val intent = Intent().apply {
+                        putExtra(PostStoryActivity.PICTURE_EXTRA, photoFile)
+                        putExtra(
+                            PostStoryActivity.IS_BACK_CAMERA_EXTRA,
+                            cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA
+                        )
+                    }
                     setResult(PostStoryActivity.CAMERA_RESULT, intent)
                     finish()
                 }
