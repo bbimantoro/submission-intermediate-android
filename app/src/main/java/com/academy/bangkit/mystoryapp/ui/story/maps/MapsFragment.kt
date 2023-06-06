@@ -1,5 +1,6 @@
 package com.academy.bangkit.mystoryapp.ui.story.maps
 
+import android.content.pm.PackageManager
 import android.content.res.Resources
 import androidx.fragment.app.Fragment
 import android.os.Bundle
@@ -8,6 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import com.academy.bangkit.mystoryapp.R
 import com.academy.bangkit.mystoryapp.data.Result
@@ -22,7 +25,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 
-class MapsFragment : Fragment() {
+class MapsFragment : Fragment(), OnMapReadyCallback {
 
     private val viewModel by viewModels<MapsViewModel> {
         ViewModelFactory.getInstance(requireActivity())
@@ -31,14 +34,7 @@ class MapsFragment : Fragment() {
     private var _binding: FragmentMapsBinding? = null
     private val binding get() = _binding!!
 
-
-    private val callback = OnMapReadyCallback { googleMap ->
-
-        googleMap.uiSettings.isCompassEnabled = true
-
-        setMapStyle(googleMap)
-        fetchStories(googleMap)
-    }
+    private lateinit var map: GoogleMap
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,13 +48,26 @@ class MapsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-        mapFragment?.getMapAsync(callback)
+        mapFragment?.getMapAsync(this)
     }
 
-    private fun setMapStyle(googleMap: GoogleMap) {
+    override fun onMapReady(googleMap: GoogleMap) {
+        map = googleMap
+
+        map.uiSettings.run {
+            isCompassEnabled = true
+            isZoomControlsEnabled = true
+        }
+
+        getMyLocation()
+        setMapStyle()
+        fetchStories()
+    }
+
+    private fun setMapStyle() {
         try {
             val success =
-                googleMap.setMapStyle(
+                map.setMapStyle(
                     MapStyleOptions.loadRawResourceStyle(
                         requireActivity(),
                         R.raw.map_style
@@ -74,7 +83,7 @@ class MapsFragment : Fragment() {
         }
     }
 
-    private fun fetchStories(googleMap: GoogleMap) {
+    private fun fetchStories() {
         viewModel.getStoriesWithLocation()
         viewModel.storyMapsResult.observe(viewLifecycleOwner) { result ->
             when (result) {
@@ -84,24 +93,15 @@ class MapsFragment : Fragment() {
                 }
 
                 is Result.Success -> {
-                    setupMarker(googleMap, result.data)
+                    setupMarker(result.data)
                 }
             }
         }
     }
 
-    private fun setupMarker(googleMap: GoogleMap, stories: List<StoryEntity>) {
+    private fun setupMarker(stories: List<StoryEntity>) {
 
-        val firstStories = stories.firstOrNull() ?: return
-        val cameraUpdate =
-            CameraUpdateFactory.newLatLngZoom(
-                LatLng(
-                    firstStories.lat,
-                    firstStories.lon
-                ), 15f
-            )
-
-        googleMap.animateCamera(cameraUpdate)
+        // val firstStories = stories.firstOrNull() ?: return
 
         stories.forEach {
             val marker = MarkerOptions()
@@ -109,33 +109,44 @@ class MapsFragment : Fragment() {
                 .title(it.name)
                 .snippet(it.description)
 
-            val markerTag = googleMap.addMarker(marker)
+            val markerTag = map.addMarker(marker)
             markerTag?.tag = stories
+
+            val cameraUpdate = CameraUpdateFactory.newLatLngZoom(
+                LatLng(
+                    it.lat,
+                    it.lon
+                ), 15f
+            )
+
+            map.animateCamera(cameraUpdate)
         }
     }
 
-//    private val requestPermissionLauncher = registerForActivityResult(
-//        ActivityResultContracts.RequestPermission()
-//    ) { isGranted ->
-//        if (isGranted) {
-//            getMyLocation()
-//        }
-//    }
+    private fun getMyLocation() {
+        if (ContextCompat.checkSelfPermission(
+                requireActivity().applicationContext,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            map.isMyLocationEnabled = true
+        } else {
+            requestPermissionLauncher.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
+        }
+    }
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                getMyLocation()
+            }
+        }
 
     private fun showError(message: String) {
         Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
     }
-
-//    private fun getMyLocation() {
-//        if (ContextCompat.checkSelfPermission(
-//                this.requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION
-//            ) == PackageManager.PERMISSION_GRANTED
-//        ) {
-//
-//        } else {
-//            requestPermissionLauncher.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
-//        }
-//    }
 
     override fun onDestroyView() {
         super.onDestroyView()

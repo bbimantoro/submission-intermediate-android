@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="@dimen/padding_s">
 
     <TextView
         android:id="@+id/errorMsgTv"
@@ -16,7 +16,7 @@
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/progressBar"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/default_size"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:indeterminate="true" />

@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import com.academy.bangkit.mystoryapp.R
@@ -29,35 +28,33 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupPagerAdapter()
-    }
+        binding.topAppBar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.language -> {
+                    startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
+                    true
+                }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.option_menu, menu)
-        return true
-    }
+                R.id.logout -> {
+                    viewModel.logout()
+                    moveToLogin()
+                    true
+                }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.language -> {
-                startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
-                true
+                else -> false
             }
-
-            R.id.logout -> {
-                viewModel.logout()
-                moveToLogin()
-                true
-            }
-
-            else -> super.onOptionsItemSelected(item)
         }
+
+        setupPagerAdapter()
     }
 
     private fun setupPagerAdapter() {
         val sectionsPagerAdapter = SectionsPagerAdapter(this)
-        binding.viewPager.adapter = sectionsPagerAdapter
-        TabLayoutMediator(binding.tabs, binding.viewPager) { tab, position ->
+        binding.contentMain.viewPager.adapter = sectionsPagerAdapter
+        TabLayoutMediator(
+            binding.contentMain.tabs,
+            binding.contentMain.viewPager
+        ) { tab, position ->
             tab.text = resources.getString(TAB_TITLES[position])
         }.attach()
 

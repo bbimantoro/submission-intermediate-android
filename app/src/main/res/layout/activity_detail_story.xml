@@ -11,7 +11,7 @@
         android:layout_width="@dimen/default_size"
         android:layout_height="@dimen/image_story_size"
         android:layout_marginStart="@dimen/margin_m"
-        android:layout_marginTop="@dimen/margin_l"
+        android:layout_marginTop="@dimen/margin_xl"
         android:layout_marginEnd="@dimen/margin_m"
         android:contentDescription="@string/content_desc_image"
         android:scaleType="centerCrop"

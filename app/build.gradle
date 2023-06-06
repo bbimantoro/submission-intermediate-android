@@ -39,6 +39,9 @@ android {
         viewBinding true
         buildConfig true
     }
+    testOptions {
+        animationsDisabled = true
+    }
 }
 
 dependencies {
@@ -105,6 +108,17 @@ dependencies {
     // special testing
     testImplementation "androidx.arch.core:core-testing:2.2.0" // InstantTaskExecutorRule
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+
+    //special instrumentation testing
+    androidTestImplementation "androidx.arch.core:core-testing:2.2.0" // InstantTaskExecutorRule
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+
+    //TestCoroutineDispatcher
+    debugImplementation "androidx.fragment:fragment-testing:1.5.7" //launchFragmentInContainer
+
+    implementation 'androidx.test.espresso:espresso-idling-resource:3.5.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.5.1'//IntentsTestRule
+
     //TestDispatcher
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
