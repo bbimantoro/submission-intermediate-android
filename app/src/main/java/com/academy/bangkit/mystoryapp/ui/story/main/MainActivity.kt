@@ -1,17 +1,15 @@
 package com.academy.bangkit.mystoryapp.ui.story.main
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
-import android.view.Menu
-import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
 import com.academy.bangkit.mystoryapp.R
+import com.academy.bangkit.mystoryapp.adapter.SectionsPagerAdapter
 import com.academy.bangkit.mystoryapp.databinding.ActivityMainBinding
 import com.academy.bangkit.mystoryapp.ui.ViewModelFactory
-import com.academy.bangkit.mystoryapp.adapter.SectionsPagerAdapter
 import com.academy.bangkit.mystoryapp.ui.auth.login.LoginActivity
 import com.google.android.material.tabs.TabLayoutMediator
 

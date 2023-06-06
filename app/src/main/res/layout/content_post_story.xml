@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <ImageView
+        android:id="@+id/previewIv"
+        android:layout_width="@dimen/default_size"
+        android:layout_height="@dimen/default_size"
+        android:layout_marginStart="@dimen/margin_m"
+        android:layout_marginTop="@dimen/margin_m"
+        android:layout_marginEnd="@dimen/margin_m"
+        android:contentDescription="@string/content_desc_image"
+        android:padding="@dimen/padding_m"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@+id/horizontalGuideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/place_holder_24" />
+
+    <Button
+        android:id="@+id/cameraBtn"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="@dimen/default_size"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_l"
+        android:layout_marginTop="@dimen/margin_m"
+        android:layout_marginEnd="@dimen/margin_l"
+        android:padding="@dimen/padding_m"
+        android:text="@string/camera"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/horizontalGuideline"
+        app:shapeAppearance="@style/roundCorner" />
+
+    <Button
+        android:id="@+id/galleryBtn"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="@dimen/default_size"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_s"
+        android:padding="@dimen/margin_m"
+        android:text="@string/gallery"
+        app:layout_constraintEnd_toEndOf="@+id/cameraBtn"
+        app:layout_constraintStart_toStartOf="@+id/cameraBtn"
+        app:layout_constraintTop_toBottomOf="@+id/cameraBtn"
+        app:shapeAppearance="@style/roundCorner" />
+
+    <EditText
+        android:id="@+id/descriptionEdt"
+        android:layout_width="@dimen/default_size"
+        android:layout_height="@dimen/default_size"
+        android:layout_marginStart="@dimen/margin_l"
+        android:layout_marginTop="@dimen/margin_m"
+        android:layout_marginEnd="@dimen/margin_l"
+        android:layout_marginBottom="@dimen/margin_m"
+        android:autofillHints="Description"
+        android:background="@drawable/bg_edt_description"
+        android:gravity="start|top"
+        android:hint="@string/enter_desc"
+        android:inputType="textMultiLine"
+        android:padding="@dimen/padding_m"
+        app:layout_constraintBottom_toTopOf="@+id/switchGps"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/galleryBtn" />
+
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/switchGps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_l"
+        android:layout_marginBottom="@dimen/margin_m"
+        android:text="@string/set_switch_location"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/uploadBtn"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/uploadBtn"
+        android:layout_width="@dimen/default_size"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_l"
+        android:layout_marginEnd="@dimen/margin_l"
+        android:layout_marginBottom="@dimen/margin_m"
+        android:padding="@dimen/padding_m"
+        android:text="@string/upload"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:shapeAppearance="@style/roundCorner" />
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontalGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.40" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/verticalGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontalGuideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -58,13 +58,14 @@ class PostStoryActivity : AppCompatActivity() {
         binding = ActivityPostStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportActionBar?.title = getString(R.string.label_post)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        binding.topAppBar.setNavigationOnClickListener {
+            moveToMain()
+        }
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         binding.apply {
-            cameraBtn.setOnClickListener {
+            contentPostStory.cameraBtn.setOnClickListener {
                 if (!allPermissionGranted()) {
                     ActivityCompat.requestPermissions(
                         this@PostStoryActivity,
@@ -77,7 +78,7 @@ class PostStoryActivity : AppCompatActivity() {
                 }
             }
 
-            galleryBtn.setOnClickListener {
+            contentPostStory.galleryBtn.setOnClickListener {
                 val intent = Intent().apply {
                     action = ACTION_GET_CONTENT
                     type = "image/*"
@@ -109,8 +110,8 @@ class PostStoryActivity : AppCompatActivity() {
     }
 
     private fun setupPostAction() {
-        binding.uploadBtn.setOnClickListener {
-            val description = binding.descriptionEdt.text.toString().trim()
+        binding.contentPostStory.uploadBtn.setOnClickListener {
+            val description = binding.contentPostStory.descriptionEdt.text.toString().trim()
 
             when {
                 description.isEmpty() -> {
@@ -132,7 +133,7 @@ class PostStoryActivity : AppCompatActivity() {
             }
         }
 
-        binding.switchGps.setOnCheckedChangeListener { _, isChecked ->
+        binding.contentPostStory.switchGps.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 getMyLastLocation()
                 createLocationRequest()
@@ -147,16 +148,16 @@ class PostStoryActivity : AppCompatActivity() {
     private val observerPostStory = Observer<Result<CommonResponse>> { result ->
         when (result) {
             is Result.Loading -> {
-                binding.progressbar.visibility = View.VISIBLE
+                binding.contentPostStory.progressbar.visibility = View.VISIBLE
             }
 
             is Result.Error -> {
-                binding.progressbar.visibility = View.GONE
+                binding.contentPostStory.progressbar.visibility = View.GONE
                 showToast(result.error)
             }
 
             is Result.Success -> {
-                binding.progressbar.visibility = View.GONE
+                binding.contentPostStory.progressbar.visibility = View.GONE
 
                 showToast(result.data.message)
 
@@ -180,7 +181,7 @@ class PostStoryActivity : AppCompatActivity() {
 
             getFile = myFile
 
-            binding.previewIv.let {
+            binding.contentPostStory.previewIv.let {
                 Glide.with(this)
                     .load(rotateBitmap(BitmapFactory.decodeFile(getFile?.path), isBackCamera))
                     .into(it)
@@ -196,7 +197,7 @@ class PostStoryActivity : AppCompatActivity() {
             val myFile = uriToFile(selectedImg, this)
             getFile = myFile
 
-            binding.previewIv.let {
+            binding.contentPostStory.previewIv.let {
                 Glide.with(this)
                     .load(myFile)
                     .into(it)
@@ -294,11 +295,6 @@ class PostStoryActivity : AppCompatActivity() {
 
     private fun showToast(message: String) {
         Toast.makeText(this@PostStoryActivity, message, Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressedDispatcher.onBackPressed()
-        return super.onSupportNavigateUp()
     }
 
     companion object {

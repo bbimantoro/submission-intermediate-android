@@ -16,6 +16,10 @@
 
     <style name="Theme.MyStoryApp" parent="Base.Theme.MyStoryApp" />
 
+    <style name="Theme.MyStoryApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.MyStoryApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
     <style name="roundCorner" parent="">
         <item name="cornerSize">20%</item>
     </style>

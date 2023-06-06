@@ -14,7 +14,6 @@ import com.academy.bangkit.mystoryapp.data.network.response.CommonResponse
 import com.academy.bangkit.mystoryapp.data.network.response.LoginResponse
 import com.academy.bangkit.mystoryapp.data.network.retrofit.StoryApiService
 import com.academy.bangkit.mystoryapp.utils.DataMapper
-import com.academy.bangkit.mystoryapp.utils.wrapEspressoIdlingResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -89,28 +88,27 @@ class StoryRepository(
             lonRequestBody = it.longitude.toString().toRequestBody(textPlainMediaType)
         }
 
-        wrapEspressoIdlingResource {
-            try {
-                val token = userPreferences.getToken().first()
-                val response =
-                    apiService.addNewStory(
-                        "Bearer $token",
-                        imageMultiPart,
-                        descriptionRequestBody,
-                        latRequestBody,
-                        lonRequestBody
-                    )
+        try {
+            val token = userPreferences.getToken().first()
+            val response =
+                apiService.addNewStory(
+                    "Bearer $token",
+                    imageMultiPart,
+                    descriptionRequestBody,
+                    latRequestBody,
+                    lonRequestBody
+                )
 
-                if (response.error) {
-                    emit(Result.Error(response.message))
-                } else {
-                    emit(Result.Success(response))
-                }
-
-            } catch (e: Exception) {
-                emit(Result.Error(e.message.toString()))
+            if (response.error) {
+                emit(Result.Error(response.message))
+            } else {
+                emit(Result.Success(response))
             }
+
+        } catch (e: Exception) {
+            emit(Result.Error(e.message.toString()))
         }
+
     }.flowOn(Dispatchers.IO)
 
     fun signup(name: String, email: String, password: String): Flow<Result<CommonResponse>> =

@@ -101,7 +101,16 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     private fun setupMarker(stories: List<StoryEntity>) {
 
-        // val firstStories = stories.firstOrNull() ?: return
+        val firstStories = stories.firstOrNull() ?: return
+
+        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(
+            LatLng(
+                firstStories.lat,
+                firstStories.lon
+            ), 15f
+        )
+
+        map.animateCamera(cameraUpdate)
 
         stories.forEach {
             val marker = MarkerOptions()
@@ -111,15 +120,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
             val markerTag = map.addMarker(marker)
             markerTag?.tag = stories
-
-            val cameraUpdate = CameraUpdateFactory.newLatLngZoom(
-                LatLng(
-                    it.lat,
-                    it.lon
-                ), 15f
-            )
-
-            map.animateCamera(cameraUpdate)
         }
     }
 

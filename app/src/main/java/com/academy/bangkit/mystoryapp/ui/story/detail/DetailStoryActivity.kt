@@ -1,9 +1,10 @@
 package com.academy.bangkit.mystoryapp.ui.story.detail
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.academy.bangkit.mystoryapp.R
 import com.academy.bangkit.mystoryapp.databinding.ActivityDetailStoryBinding
+import com.academy.bangkit.mystoryapp.ui.story.main.MainActivity
 import com.bumptech.glide.Glide
 
 class DetailStoryActivity : AppCompatActivity() {
@@ -15,8 +16,10 @@ class DetailStoryActivity : AppCompatActivity() {
         binding = ActivityDetailStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportActionBar?.title = getString(R.string.label_detail)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        binding.topAppBar.setNavigationOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
 
         setupData()
     }
@@ -26,18 +29,12 @@ class DetailStoryActivity : AppCompatActivity() {
         val name = intent.getStringExtra(NAME_EXTRA)
         val description = intent.getStringExtra(DESC_EXTRA)
 
-
-        Glide.with(this).load(photoUrl).into(binding.thumbnailIv)
-
         binding.apply {
-            nameTv.text = name
-            descTv.text = description
+            contentDetail.nameTv.text = name
+            contentDetail.descTv.text = description
         }
-    }
 
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressedDispatcher.onBackPressed()
-        return true
+        Glide.with(this).load(photoUrl).into(binding.contentDetail.thumbnailIv)
     }
 
     companion object {

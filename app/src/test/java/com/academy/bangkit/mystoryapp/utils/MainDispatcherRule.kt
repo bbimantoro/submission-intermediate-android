@@ -1,6 +1,5 @@
 package com.academy.bangkit.mystoryapp.utils
 
-import androidx.paging.ExperimentalPagingApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestDispatcher
