@@ -25,7 +25,8 @@
     <string name="err_maps">Gagal memuat peta</string>
     <string name="err_location">Location is not found. Try Again</string>
     <string name="err_gps">Anda harus mengaktifkan GPS untuk menggunakan aplikasi ini!</string>
-
+    <string name="permission_required">Akses kamera diperlukan untuk menampilkan pratinjau kamera.</string>
+    <string name="permission_granted">Izin diberikan. Anda dapat menggunakan kamera sekarang.</string>
     <string name="set_switch_location">Atur lokasi</string>
 
     <string name="signup_success_message">Registrasi berhasil!</string>

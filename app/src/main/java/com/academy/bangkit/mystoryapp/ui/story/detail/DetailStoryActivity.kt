@@ -15,7 +15,7 @@ class DetailStoryActivity : AppCompatActivity() {
         binding = ActivityDetailStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportActionBar?.title = intent.getStringExtra(NAME_EXTRA)
+        supportActionBar?.title = getString(R.string.label_detail)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         setupData()

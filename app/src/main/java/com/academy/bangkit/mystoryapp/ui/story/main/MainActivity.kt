@@ -1,8 +1,6 @@
 package com.academy.bangkit.mystoryapp.ui.story.main
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
@@ -11,14 +9,11 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.academy.bangkit.mystoryapp.R
 import com.academy.bangkit.mystoryapp.databinding.ActivityMainBinding
 import com.academy.bangkit.mystoryapp.ui.ViewModelFactory
 import com.academy.bangkit.mystoryapp.adapter.SectionsPagerAdapter
 import com.academy.bangkit.mystoryapp.ui.auth.login.LoginActivity
-import com.academy.bangkit.mystoryapp.ui.story.post.PostStoryActivity
 import com.google.android.material.tabs.TabLayoutMediator
 
 class MainActivity : AppCompatActivity() {
@@ -33,20 +28,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.addStoryFab.setOnClickListener {
-            if (!allPermissionGranted()) {
-                ActivityCompat.requestPermissions(
-                    this,
-                    REQUIRED_PERMISSIONS,
-                    REQUEST_CODE_PERMISSIONS
-                )
-            } else {
-                val intent = Intent(this, PostStoryActivity::class.java)
-                startActivity(intent)
-            }
-        }
-
 
         setupPagerAdapter()
     }
@@ -73,24 +54,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_CODE_PERMISSIONS) {
-            if (!allPermissionGranted()) {
-                showToast(getString(R.string.err_permission))
-                finish()
-            }
-        }
-    }
-
-    private fun allPermissionGranted() = REQUIRED_PERMISSIONS.all {
-        ContextCompat.checkSelfPermission(baseContext, it) == PackageManager.PERMISSION_GRANTED
-    }
-
     private fun setupPagerAdapter() {
         val sectionsPagerAdapter = SectionsPagerAdapter(this)
         binding.viewPager.adapter = sectionsPagerAdapter
@@ -109,14 +72,7 @@ class MainActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun showToast(message: String?) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
-
     companion object {
-        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
-        private const val REQUEST_CODE_PERMISSIONS = 10
-
         @StringRes
         private val TAB_TITLES = intArrayOf(
             R.string.tab_text_1,

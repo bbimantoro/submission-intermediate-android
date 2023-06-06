@@ -1,6 +1,6 @@
 package com.academy.bangkit.mystoryapp.ui.story.main
 
-import android.Manifest
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,7 +12,7 @@ import com.academy.bangkit.mystoryapp.databinding.FragmentHomeBinding
 import com.academy.bangkit.mystoryapp.ui.ViewModelFactory
 import com.academy.bangkit.mystoryapp.adapter.LoadingStateAdapter
 import com.academy.bangkit.mystoryapp.adapter.StoryAdapter
-
+import com.academy.bangkit.mystoryapp.ui.story.post.PostStoryActivity
 
 class HomeFragment : Fragment() {
 
@@ -37,8 +37,11 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        getData()
+        binding.addStoryFab.setOnClickListener {
+            startActivity(Intent(requireActivity(), PostStoryActivity::class.java))
+        }
 
+        getData()
     }
 
     private fun getData() {
@@ -63,9 +66,5 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    companion object {
-
     }
 }

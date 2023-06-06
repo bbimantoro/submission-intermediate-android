@@ -28,8 +28,10 @@
     <string name="err_maps">Failed to load map</string>
     <string name="err_location">Location is not found. Try Again</string>
     <string name="err_gps">You must enable GPS to use this app!</string>
-
+    <string name="permission_required">Camera access is required to display the camera preview.</string>
+    <string name="permission_granted">Permission is granted. You can use the camera now.</string>
     <string name="set_switch_location">Set location</string>
+    <string name="ok" translatable="false">OK</string>
 
     <string name="signup_success_message">Registration successful!</string>
     <string name="post_story_success_message">Story posted successfully!</string>

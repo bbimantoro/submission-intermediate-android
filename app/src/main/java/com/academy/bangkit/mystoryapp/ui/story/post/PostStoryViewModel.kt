@@ -1,5 +1,6 @@
 package com.academy.bangkit.mystoryapp.ui.story.post
 
+import android.location.Location
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,11 +19,10 @@ class PostStoryViewModel(private val storyRepository: StoryRepository) : ViewMod
     fun addNewStory(
         photo: File,
         description: String,
-        lat: Float? = null,
-        lon: Float? = null
+        location: Location? = null,
     ) {
         viewModelScope.launch {
-            storyRepository.addNewStory(photo, description, lat, lon).collect {
+            storyRepository.addNewStory(photo, description, location).collect {
                 _result.value = it
             }
         }

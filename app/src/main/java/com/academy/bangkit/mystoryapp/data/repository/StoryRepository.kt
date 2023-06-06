@@ -1,5 +1,6 @@
 package com.academy.bangkit.mystoryapp.data.repository
 
+import android.location.Location
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -20,6 +21,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
@@ -64,8 +66,7 @@ class StoryRepository(
     fun addNewStory(
         photo: File,
         description: String,
-        lat: Float?,
-        lon: Float?
+        location: Location?,
     ): Flow<Result<CommonResponse>> = flow {
         emit(Result.Loading)
 
@@ -79,8 +80,13 @@ class StoryRepository(
         )
 
         val descriptionRequestBody = description.toRequestBody(textPlainMediaType)
-        val latRequestBody = lat.toString().toRequestBody(textPlainMediaType)
-        val lonRequestBody = lon.toString().toRequestBody(textPlainMediaType)
+
+        var latRequestBody: RequestBody? = null
+        var lonRequestBody: RequestBody? = null
+        location?.let {
+            latRequestBody = it.latitude.toString().toRequestBody(textPlainMediaType)
+            lonRequestBody = it.longitude.toString().toRequestBody(textPlainMediaType)
+        }
 
         try {
             val token = userPreferences.getToken().first()

@@ -17,6 +17,7 @@ import android.widget.Toast
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.academy.bangkit.mystoryapp.R
@@ -45,6 +46,7 @@ class PostStoryActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivityPostStoryBinding
+
     private lateinit var locationRequest: LocationRequest
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
@@ -63,8 +65,16 @@ class PostStoryActivity : AppCompatActivity() {
 
         binding.apply {
             cameraBtn.setOnClickListener {
-                val intent = Intent(this@PostStoryActivity, CameraActivity::class.java)
-                launcherIntentCamera.launch(intent)
+                if (!allPermissionGranted()) {
+                    ActivityCompat.requestPermissions(
+                        this@PostStoryActivity,
+                        REQUIRED_PERMISSIONS,
+                        REQUEST_CODE_PERMISSIONS
+                    )
+                } else {
+                    val intent = Intent(this@PostStoryActivity, CameraActivity::class.java)
+                    launcherIntentCamera.launch(intent)
+                }
             }
 
             galleryBtn.setOnClickListener {
@@ -78,6 +88,24 @@ class PostStoryActivity : AppCompatActivity() {
         }
 
         setupPostAction()
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CODE_PERMISSIONS) {
+            if (!allPermissionGranted()) {
+                showToast(getString(R.string.err_permission))
+                finish()
+            }
+        }
+    }
+
+    private fun allPermissionGranted() = REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(baseContext, it) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun setupPostAction() {
@@ -95,8 +123,7 @@ class PostStoryActivity : AppCompatActivity() {
                         viewModel.addNewStory(
                             compressFile,
                             description,
-                            location?.latitude?.toFloat(),
-                            location?.longitude?.toFloat()
+                            location
                         )
                     } ?: run {
                         showToast(getString(R.string.err_image_field))
@@ -148,17 +175,14 @@ class PostStoryActivity : AppCompatActivity() {
                 @Suppress("DEPRECATION")
                 result.data?.getSerializableExtra(PICTURE_EXTRA)
             } as? File
-            val isBackCamera = result.data?.getBooleanExtra(IS_BACK_CAMERA_EXTRA, true) as Boolean
+            val isBackCamera =
+                result.data?.getBooleanExtra(IS_BACK_CAMERA_EXTRA, true) as Boolean
 
             getFile = myFile
 
-            val rotateFile = rotateBitmap(
-                BitmapFactory.decodeFile(getFile?.path), isBackCamera
-            )
-
             binding.previewIv.let {
                 Glide.with(this)
-                    .load(rotateFile)
+                    .load(rotateBitmap(BitmapFactory.decodeFile(getFile?.path), isBackCamera))
                     .into(it)
             }
         }
@@ -183,11 +207,8 @@ class PostStoryActivity : AppCompatActivity() {
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permission ->
+
         when {
-            permission[Manifest.permission.CAMERA] ?: false -> {
-
-            }
-
             permission[Manifest.permission.ACCESS_FINE_LOCATION] ?: false -> {
                 getMyLastLocation()
             }
@@ -281,9 +302,11 @@ class PostStoryActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val TAG = "PostStoryActivity"
+        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+        private const val REQUEST_CODE_PERMISSIONS = 10
         const val CAMERA_RESULT = 200
         const val PICTURE_EXTRA = "picture_extra"
         const val IS_BACK_CAMERA_EXTRA = "is_back_camera_extra"
+        const val TAG = "PostStoryActivity"
     }
 }
